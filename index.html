@@ -58,7 +58,7 @@
 	</head>
 
 	<body>
-	<button id="theme-toggle" class="theme-btn-circle" style="position: fixed !important; top: 15px !important; right: 15px !important; z-index: 999999 !important; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.25); transition: all 0.3s ease;">
+	<button id="theme-toggle" class="theme-btn-circle" style="position: fixed !important; top: 15px !important; right: 15px !important; z-index: 999999 !important; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
     🌙
 </button>
 	<div id="colorlib-page">
@@ -158,7 +158,7 @@
 									<div class="about-desc">
 										<span class="heading-meta">About Us</span>
 										<h2 class="colorlib-heading">Who Am I ?</h2>
-										<p>Hi, I am Sanaul islam, I am developer.</p>
+										<p>Hi, I am Sanaul Islam, a Full-Stack Developer specializing in Java and Python. I build scalable backend architectures, intelligent data solutions, and dynamic user interfaces.</p>
                                            
 									</div>
 								</div>
@@ -167,25 +167,25 @@
 								<div class="col-md-3 animate-box" data-animate-effect="fadeInLeft">
 									<div class="services color-1">
 										<span class="icon2"><i class="icon-bulb"></i></span>
-										<h3>Building robust backend systems with Java and dynamic frontends.</h3>
+										<h3>Designing secure, RESTful microservices and robust APIs using Java & Spring Boot.</h3>
 									</div>
 								</div>
 								<div class="col-md-3 animate-box" data-animate-effect="fadeInRight">
 									<div class="services color-2">
 										<span class="icon2"><i class="icon-globe-outline"></i></span>
-										<h3>Expertise in Spring Boot, Hibernate, and modern frontend frameworks.</h3>
+										<h3>Creating responsive, dynamic, and user-centric UIs with React, Angular, and JavaScript.</h3>
 									</div>
 								</div>
 								<div class="col-md-3 animate-box" data-animate-effect="fadeInTop">
 									<div class="services color-3">
 										<span class="icon2"><i class="icon-data"></i></span>
-										<h3>Developing scalable, secure, and full-lifecycle enterprise web applications.</h3>
+										<h3>Managing relational databases (SQL/PostgreSQL) and deploying cloud-native applications.</h3>
 									</div>
 								</div>
 								<div class="col-md-3 animate-box" data-animate-effect="fadeInBottom">
 									<div class="services color-4">
 										<span class="icon2"><i class="icon-phone3"></i></span>
-										<h3>Java, Spring Boot, Microservices, SQL, React/Angular.</h3>
+										<h3>Version control with Git, containerization using Docker, and CI/CD pipeline automation.</h3>
 									</div>
 								</div>
 							</div>
@@ -710,6 +710,27 @@
     </div>
 </div>
 
+<!-- 7. Tic-Tac-Toe -->
+<div class="col-md-6 item project" style="margin-bottom: 25px; cursor: pointer; display: none;">
+    <div style="background: #1e293b; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #a855f7; transition: transform 0.2s;">
+        <span style="color: #a855f7; font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Event Handling Logic</span>
+        <h3 style="color: #fff; margin: 8px 0 12px 0; font-size: 22px; font-weight: 700;">Tic-Tac-Toe</h3>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">A fully responsive polling booth architecture simulation with administrative control consoles for counting and results.</p>
+        <span style="display: inline-block; background: #a855f7; color: #0f172a; padding: 10px 20px; font-weight: bold; border-radius: 6px;">Start Game</span>
+    </div>
+</div>
+
+
+<!-- 7. snack -->
+<div class="col-md-6 item project" style="margin-bottom: 25px; cursor: pointer; display: none;">
+    <div style="background: #1e293b; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 5px solid #a855f7; transition: transform 0.2s;">
+        <span style="color: #a855f7; font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;">Event Handling Logic</span>
+        <h3 style="color: #fff; margin: 8px 0 12px 0; font-size: 22px; font-weight: 700;">Snack Game</h3>
+        <p style="color: #94a3b8; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">A fully responsive polling booth architecture simulation with administrative control consoles for counting and results.</p>
+        <span style="display: inline-block; background: #a855f7; color: #0f172a; padding: 10px 20px; font-weight: bold; border-radius: 6px;">Start Game</span>
+    </div>
+</div>
+
 
 
 
@@ -1227,6 +1248,16 @@ document.addEventListener("DOMContentLoaded", function() {
         // 7. नॉर्मल सिंपल कैलकुलेटर
         else if (titleText.includes('calculator')) {
             window.location.href = 'project/calculator.html';
+        }
+		
+		        // 8.Tic-Tac-Toe game
+        else if (titleText.includes('toe')) {
+            window.location.href = 'project/Tic-Tac-Toe.html';
+        }
+		
+	    // 8.snack game
+        else if (titleText.includes('snack')) {
+            window.location.href = 'project/snack.html';
         }
 
 }
