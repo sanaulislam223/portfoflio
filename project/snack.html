@@ -1,24 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-  <title>Snake Game Pro</title>
-  <style>
-    html, body { height: 100%; margin: 0; }
-    body { 
-      background: #0f1115; 
-      display: flex; 
-      flex-direction: column;
-      align-items: center; 
-      justify-content: center; 
-      color: white;
-      font-family: Arial, sans-serif;
-    }
-    .controls {
-      margin-bottom: 20px;
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game Pro</title>
+    <style>
+        /* मोबाइल पर स्वाइप करते समय स्क्रीन न हिले इसके लिए touch-action: none जोड़ा गया है */
+        canvas {
+            border: 2px solid white;
+            background-color: black;
+            display: block;
+            margin: 0 auto;
+            touch-action: none; 
+        }
+        body {
+            background: #111;
+            color: white;
+            text-align: center;
+            font-family: sans-serif;
+        }
+        .btn-container {
+            margin: 20px;
+        }
     .btn {
       background: #1a1d24;
       color: #00ff88;
@@ -28,154 +31,204 @@
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
-    }
-    .btn:hover { 
+	  }
+	      .btn:hover { 
       background: #00ff88; 
       color: black; 
       box-shadow: 0 0 12px #00ff88; 
     }
-    #speed-text { font-size: 16px; font-weight: bold; }
-    canvas { 
-      border: 3px solid #2a2e3d; 
-      background: #050508;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.7);
-      border-radius: 8px;
-    }
-	.name {
-	color:white;
-	
-	}
-	.back-btn { display: inline-block;  margin-top:-10px; color: #00ff88; text-decoration: none; font-weight: bold; font-size: 14px; }
-  </style>
+        .back-btn {
+            color: #00ff88;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+		/* पुराना canvas { ... } कोड हटाकर इसे पेस्ट करें */
+canvas {
+    border: 2px solid white;
+    background-color: black;
+    display: block;
+    margin: 0 auto;
+    touch-action: none; 
+    
+    /* मोबाइल स्क्रीन पर बड़ा दिखाने के लिए नई लाइन्स */
+    max-width: 95vw;    /* स्क्रीन की चौड़ाई का 95% हिस्सा घेरेगा */
+    max-height: 70vh;   /* स्क्रीन की ऊंचाई का 70% हिस्सा घेरेगा */
+    width: 100%;        /* छोटी स्क्रीन पर अपने आप फैलेगा */
+    height: auto;       /* चौड़ाई के हिसाब से ऊंचाई सेट रखेगा */
+    box-sizing: border-box;
+}
+
+    </style>
 </head>
 <body>
 
-  <div class="controls">
+    <div class="btn-container">
+        <button class="btn" onclick="changeSpeed(-1)">Slower -</button>
+        <span id="speed-text">Speed Level: 3</span>
+        <button class="btn" onclick="changeSpeed(1)">Faster +</button>
+    </div>
 
-    <button class="btn" onclick="changeSpeed(1)">Slower -</button>
-    <div id="speed-text">Speed Level: 3</div>
-    <button class="btn" onclick="changeSpeed(-1)">Faster +</button>
-  </div>
+    <canvas width="400" height="400" id="game"></canvas>
 
-  <canvas width="400" height="400" id="game"></canvas>
+    <h3 class="name">SANAUL ISLAM</h3>
+    <a href="../index.html#work" class="back-btn">Back to Portfolio</a>
 
-  <script>
-    var canvas = document.getElementById('game');
-    var context = canvas.getContext('2d');
+<script>
+var canvas = document.getElementById('game');
+var context = canvas.getContext('2d');
 
-    var grid = 16;
-    var count = 0;
-    var speedLimit = 4; // 💡 यह वेरिएबल मिसिंग था
-    var speedLevel = 3;
+var grid = 16;
+var count = 0;
+var speedLimit = 4; 
+var speedLevel = 3;
 
-    var snake = {
-      x: 160,
-      y: 160,
-      dx: grid,
-      dy: 0,
-      cells: [],
-      maxCells: 4
-    };
-    
-    var apple = {
-      x: 320,
-      y: 320
-    };
+var snake = {
+    x: 160,
+    y: 160,
+    dx: grid,
+    dy: 0,
+    cells: [],
+    maxCells: 4
+};
 
-    function getRandomInt(min, max) {
-      return Math.floor(Math.random() * (max - min)) + min;
-    }
+var apple = {
+    x: 320,
+    y: 320
+};
 
-    function changeSpeed(amount) {
-      if (speedLimit + amount >= 2 && speedLimit + amount <= 8) {
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function changeSpeed(amount) {
+    if (speedLimit + amount >= 2 && speedLimit + amount <= 8) {
         speedLimit += amount;
         speedLevel = amount > 0 ? speedLevel - 1 : speedLevel + 1;
-        document.getElementById("speed-text").innerText = `Speed Level: ${speedLevel}`;
-      }
+        document.getElementById("speed-text").innerText = 'Speed Level: ' + (4 - speedLimit + 3);
+    }
+}
+
+function loop() {
+    requestAnimationFrame(loop);
+
+    if (++count < speedLimit) {
+        return;
+    }
+    count = 0;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    snake.x += snake.dx;
+    snake.y += snake.dy;
+
+    if (snake.x < 0) { snake.x = canvas.width - grid; }
+    else if (snake.x >= canvas.width) { snake.x = 0; }
+
+    if (snake.y < 0) { snake.y = canvas.height - grid; }
+    else if (snake.y >= canvas.height) { snake.y = 0; }
+
+    snake.cells.unshift({x: snake.x, y: snake.y});
+
+    if (snake.cells.length > snake.maxCells) {
+        snake.cells.pop();
     }
 
-    function loop() {
-      requestAnimationFrame(loop);
+    context.fillStyle = '#ff3366';
+    context.shadowBlur = 12;
+    context.shadowColor = '#ff3366';
+    context.fillRect(apple.x + 1, apple.y + 1, grid - 2, grid - 2);
 
-      if (++count < speedLimit) {
-        return;
-      }
-      count = 0;
-      context.clearRect(0,0,canvas.width,canvas.height);
-
-      snake.x += snake.dx;
-      snake.y += snake.dy;
-
-      if (snake.x < 0) { snake.x = canvas.width - grid; }
-      else if (snake.x >= canvas.width) { snake.x = 0; }
-      
-      if (snake.y < 0) { snake.y = canvas.height - grid; }
-      else if (snake.y >= canvas.height) { snake.y = 0; }
-
-      snake.cells.unshift({x: snake.x, y: snake.y});
-
-      if (snake.cells.length > snake.maxCells) {
-        snake.cells.pop();
-      }
-
-      context.fillStyle = '#ff3366';
-      context.shadowBlur = 12;
-      context.shadowColor = '#ff3366';
-      context.fillRect(apple.x + 1, apple.y + 1, grid - 2, grid - 2);
-
-      snake.cells.forEach(function(cell, index) {
+    snake.cells.forEach(function(cell, index) {
         if (index === 0) {
-          context.fillStyle = '#00aa55';
-          context.shadowColor = '#00ff88';
-          context.shadowBlur = 15;
-          context.fillRect(cell.x, cell.y, grid, grid);
-          
-          context.fillStyle = 'white';
-          context.shadowBlur = 0;
-          context.fillRect(cell.x + 3, cell.y + 3, 3, 3);
-          context.fillRect(cell.x + 10, cell.y + 3, 3, 3);
+            context.fillStyle = '#00aa55';
+            context.shadowColor = '#00ff88';
+            context.shadowBlur = 15;
+            context.fillRect(cell.x, cell.y, grid, grid);
+
+            context.fillStyle = 'white';
+            context.shadowBlur = 0;
+            context.fillRect(cell.x + 3, cell.y + 3, 3, 3);
+            context.fillRect(cell.x + 10, cell.y + 3, 3, 3);
         } else {
-          context.fillStyle = '#00ff88';
-          context.shadowBlur = 4;
-          context.shadowColor = '#00ff88';
-          context.fillRect(cell.x + 1, cell.y + 1, grid - 2, grid - 2);
+            context.fillStyle = '#00ff88';
+            context.shadowBlur = 4;
+            context.shadowColor = '#00ff88';
+            context.fillRect(cell.x + 1, cell.y + 1, grid - 2, grid - 2);
         }
 
         if (cell.x === apple.x && cell.y === apple.y) {
-          snake.maxCells++;
-          apple.x = getRandomInt(0, 25) * grid;
-          apple.y = getRandomInt(0, 25) * grid;
+            snake.maxCells++;
+            apple.x = getRandomInt(0, 25) * grid;
+            apple.y = getRandomInt(0, 25) * grid;
         }
 
         for (var i = index + 1; i < snake.cells.length; i++) {
-          if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
-            snake.x = 160;
-            snake.y = 160;
-            snake.cells = [];
-            snake.maxCells = 4;
-            snake.dx = grid;
-            snake.dy = 0;
-            apple.x = 320;
-            apple.y = 320;
-          }
+            if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+                snake.x = 160;
+                snake.y = 160;
+                snake.cells = [];
+                snake.maxCells = 4;
+                snake.dx = grid;
+                snake.dy = 0;
+                apple.x = 320;
+                apple.y = 320;
+            }
         }
-      });
-      context.shadowBlur = 0;
-    }
-
-    document.addEventListener('keydown', function(e) {
-      if (e.which === 37 && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
-      else if (e.which === 38 && snake.dy === 0) { snake.dy = -grid; snake.dx = 0; }
-      else if (e.which === 39 && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
-      else if (e.which === 40 && snake.dy === 0) { snake.dy = grid; snake.dx = 0; }
     });
+    context.shadowBlur = 0;
+}
 
-    requestAnimationFrame(loop);
-  </script>
-  <h3 class="name" >SANAUL ISLAM<h3>
-    <a href="../index.html#work" class="back-btn">Back to Portfolio</a>
+// कीबोर्ड कंट्रोल (PC के लिए)
+document.addEventListener('keydown', function(e) {
+    if (e.which === 37 && snake.dx === 0) { snake.dx = -grid; snake.dy = 0; }
+    else if (e.which === 38 && snake.dy === 0) { snake.dy = -grid; snake.dx = 0; }
+    else if (e.which === 39 && snake.dx === 0) { snake.dx = grid; snake.dy = 0; }
+    else if (e.which === 40 && snake.dy === 0) { snake.dy = grid; snake.dx = 0; }
+});
 
+// --- नया मोबाइल स्वाइप कंट्रोल कोड यहाँ से शुरू ---
+let touchStartX = 0;
+let touchStartY = 0;
 
+document.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+}, { passive: true });
 
+document.addEventListener('touchend', function(e) {
+    if (!touchStartX || !touchStartY) return;
+
+    let touchEndX = e.changedTouches[0].clientX;
+    let touchEndY = e.changedTouches[0].clientY;
+
+    let diffX = touchEndX - touchStartX;
+    let diffY = touchEndY - touchStartY;
+
+    if (Math.abs(diffX) > 30 || Math.abs(diffY) > 30) {
+        if (Math.abs(diffX) > Math.abs(diffY)) {
+            if (diffX > 0 && snake.dx === 0) {
+                snake.dx = grid;
+                snake.dy = 0;
+            } else if (diffX < 0 && snake.dx === 0) {
+                snake.dx = -grid;
+                snake.dy = 0;
+            }
+        } else {
+            if (diffY > 0 && snake.dy === 0) {
+                snake.dx = 0;
+                snake.dy = grid;
+            } else if (diffY < 0 && snake.dy === 0) {
+                snake.dx = 0;
+                snake.dy = -grid;
+            }
+        }
+    }
+    touchStartX = 0;
+    touchStartY = 0;
+}, { passive: true });
+// --- मोबाइल स्वाइप कंट्रोल कोड यहाँ समाप्त ---
+
+requestAnimationFrame(loop);
+</script>
 </body>
 </html>
