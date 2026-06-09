@@ -31,8 +31,22 @@
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
-	  }
-	      .btn:hover { 
+    }
+    .btn:hover { 
+      background: #00ff88; 
+      color: black; 
+      box-shadow: 0 0 12px #00ff88; 
+    }    .btn {
+      background: #1a1d24;
+      color: #00ff88;
+      border: 2px solid #00ff88;
+      padding: 8px 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn:hover { 
       background: #00ff88; 
       color: black; 
       box-shadow: 0 0 12px #00ff88; 
@@ -64,10 +78,12 @@ canvas {
 <body>
 
     <div class="btn-container">
-        <button class="btn" onclick="changeSpeed(-1)">Slower -</button>
+        <button class="btn" onclick="changeSpeed(1)">Slower -</button>
         <span id="speed-text">Speed Level: 3</span>
-        <button class="btn" onclick="changeSpeed(1)">Faster +</button>
+        <button class="btn" onclick="changeSpeed(-1)">Faster +</button>
     </div>
+
+
 
     <canvas width="400" height="400" id="game"></canvas>
 
