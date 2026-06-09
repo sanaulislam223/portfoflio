@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronic Voting Machine (EVM)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .evm-container {
+            display: flex;
+            width: 1050px;
+            background: #ffffff;
+            border: 4px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 4px;
+        }
+        /* Left Section: Ballot Unit */
+        .ballot-unit {
+            flex: 1.8;
+            padding: 15px;
+            border-right: 4px solid red;
+            background: #fafafa;
+        }
+        .main-header {
+            text-align: left;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #000;
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+        .party-row {
+            display: flex;
+            align-items: center;
+            border: 2px solid #ccc;
+            margin-bottom: 8px;
+            padding: 5px 10px;
+            background: #fff;
+        }
+        .party-logo {
+            width: 50px;
+            height: 45px;
+            font-size: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: 2px solid #ccc;
+            padding-right: 10px;
+        }
+        .party-name {
+            flex: 1;
+            font-size: 24px;
+            font-weight: bold;
+            padding-left: 25px;
+            color: #000;
+            letter-spacing: 1px;
+        }
+        .red-lamp {
+            width: 30px;
+            height: 30px;
+            background-color: #7f8c8d;
+            border-radius: 50%;
+            margin-right: 25px;
+            border: 2px solid #555;
+            transition: background-color 0.1s;
+        }
+        .red-lamp.glow {
+            background-color: #ff0000;
+            box-shadow: 0 0 15px #ff0000;
+        }
+        .blue-vote-btn {
+            width: 75px;
+            height: 35px;
+            background: #4cc3f1;
+            border: 2px solid #2980b9;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: inset 0 -3px 0 #2980b9;
+        }
+        .blue-vote-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Right Section: Control Unit & VVPAT */
+        .control-unit {
+            flex: 1.2;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #000;
+            letter-spacing: 1px;
+        }
+        .officer-status-lamp {
+            width: 55px;
+            height: 55px;
+            background-color: #ff0000; /* Default Red as per preview */
+            border-radius: 50%;
+            border: 3px solid #333;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            margin-bottom: 30px;
+        }
+        .vvpat-display-box {
+            width: 200px;
+            height: 200px;
+            border: 3px solid #333;
+            background: #fdfdfd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        .vvpat-paper {
+            width: 150px;
+            height: 110px;
+            background: #fff;
+            border: 1px dashed #555;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            position: absolute;
+            top: 10px;
+            animation: slipAnimation 3.5s forwards;
+        }
+        @keyframes slipAnimation {
+            0% { transform: translateY(-130px); opacity: 1; }
+            25% { transform: translateY(0); opacity: 1; }
+            75% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(160px); opacity: 0; }
+        }
+        .counting-panel {
+            width: 100%;
+            border-top: 3px solid #333;
+            padding-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .counting-btn {
+            width: 200px;
+            height: 40px;
+            background: #4cc3f1;
+            border: 2px solid #2980b9;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+            border-radius: 4px;
+            letter-spacing: 1px;
+        }
+        
+        /* Modal for Results */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 8px;
+            width: 350px; border: 3px solid #333;
+        }
+        .modal-content h2 { margin-top: 0; border-bottom: 2px solid #333; padding-bottom: 5px;}
+        .result-row { display: flex; justify-content: space-between; font-size: 18px; margin: 8px 0; font-weight: bold;}
+        .close-btn { background: #ff0000; color: white; border: none; padding: 8px 15px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 15px;}
+    </style>
+</head>
+<body>
+
+<div class="evm-container">
+    <!-- Left Section: Ballot Unit -->
+    <div class="ballot-unit">
+        <div class="main-header">ELECTRONIC VOTING MACHINE (EVM)</div>
+        
+        <div class="party-row"><div class="party-logo">🪷</div><div class="party-name">BJP</div><div class="red-lamp" id="lamp-bjp"></div><button class="blue-vote-btn" onclick="vote('BJP')"></button></div>
+        <div class="party-row"><div class="party-logo">✋</div><div class="party-name">INC</div><div class="red-lamp" id="lamp-inc"></div><button class="blue-vote-btn" onclick="vote('INC')"></button></div>
+        <div class="party-row"><div class="party-logo">🚲</div><div class="party-name">SP</div><div class="red-lamp" id="lamp-sp"></div><button class="blue-vote-btn" onclick="vote('SP')"></button></div>
+        <div class="party-row"><div class="party-logo">🚩</div><div class="party-name">SBSP</div><div class="red-lamp" id="lamp-sbsp"></div><button class="blue-vote-btn" onclick="vote('SBSP')"></button></div>
+        <div class="party-row"><div class="party-logo">🐘</div><div class="party-name">BSP</div><div class="red-lamp" id="lamp-bsp"></div><button class="blue-vote-btn" onclick="vote('BSP')"></button></div>
+        <div class="party-row"><div class="party-logo">⚖️</div><div class="party-name">PPI</div><div class="red-lamp" id="lamp-ppi"></div><button class="blue-vote-btn" onclick="vote('PPI')"></button></div>
+        <div class="party-row"><div class="party-logo">🌾</div><div class="party-name">RLD</div><div class="red-lamp" id="lamp-rld"></div><button class="blue-vote-btn" onclick="vote('RLD')"></button></div>
+        <div class="party-row"><div class="party-logo">🪁</div><div class="party-name">AIMIM</div><div class="red-lamp" id="lamp-aimim"></div><button class="blue-vote-btn" onclick="vote('AIMIM')"></button></div>
+        <div class="party-row"><div class="party-logo">❌</div><div class="party-name">NOTA</div><div class="red-lamp" id="lamp-nota"></div><button class="blue-vote-btn" onclick="vote('NOTA')"></button></div>
+    </div>
+
+    <!-- Right Section: Control Unit & VVPAT -->
+    <div class="control-unit">
+        <div class="section-title">POLLING OFFICER</div>
+        <div class="officer-status-lamp" id="officer-lamp"></div>
+        
+        <div class="section-title" style="margin-bottom: 5px;">VVPAT</div>
+        <div class="vvpat-display-box">
+            <div class="vvpat-paper" id="vvpat-paper">
+                <span id="slip-icon" style="font-size: 32px;"></span>
+                <span id="slip-text"></span>
+            </div>
+            <span id="vvpat-lbl" style="font-weight: bold; color: #7f8c8d;">READY</span>
+        </div>
+        
+        <div class="counting-panel">
+            <div class="section-title" style="margin-bottom: 15px;">EVM COUNTING</div>
+            <button class="counting-btn" onclick="openResults()">SHOW RESULTS</button>
+        </div>
+    </div>
+</div>
+
+<!-- Results Modal -->
+<div class="modal" id="resultsModal">
+    <div class="modal-content">
+        <h2>VOTING COUNTS</h2>
+        <div id="results-body"></div>
+        <button class="close-btn" onclick="closeResults()">CLOSE PANEL</button>
+    </div>
+</div>
+
+<!-- Audio for EVM Beep -->
+<audio id="beepAudio" src="https://google.com"></audio>
+
+<script>
+    // वोट स्टोर करने के लिए डेटाबेस ऑब्जेक्ट
+    let votes = { BJP: 0, INC: 0, SP: 0, SBSP: 0, BSP: 0, PPI: 0, RLD: 0, AIMIM: 0, NOTA: 0 };
+    let logos = { BJP: '🪷', INC: '✋', SP: '🚲', SBSP: '🚩', BSP: '🐘', PPI: '⚖️', RLD: '🌾', AIMIM: '🪁', NOTA: '❌' };
+    let canVote = true;
+
+    function vote(party) {
+        if (!canVote) return;
+        canVote = false;
+
+        // वोट जोड़ना
+        votes[party]++;
+
+        // इंडिकेटर लैंप चालू करना
+        let lampId = "lamp-" + party.toLowerCase();
+        document.getElementById(lampId).classList.add('glow');
+
+        // बीप साउंड प्ले करना
+        let beep = document.getElementById('beepAudio');
+        beep.currentTime = 0;
+        beep.play().catch(e => console.log("Audio play blocked"));
+

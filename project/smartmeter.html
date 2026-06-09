@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Meter Prepaid</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* मुख्य हेडिंग */
+
+.main-title {
+    color: #802a2a;
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0 auto; /* यह हेडिंग को बीच में धकेलेगा */
+    text-align: center;
+	
+}
+
+        /* मुख्य कंटेनर (लेआउट को दो हिस्सों में बांटने के लिए) */
+        .container {
+            display: flex;
+            width: 85%;
+            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* बायां हिस्सा: इनपुट और बटन फॉर्म */
+        .form-section {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-weight: bold;
+            color: black;
+            font-size: 16px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid black;
+            font-size: 13px;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 15px;
+            font-weight: bold;
+            background-color: none;
+            border: 2px solid black;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 5px;
+        }
+
+        /* अलग-अलग बटनों के टेक्स्ट का रंग */
+        .btn-add-balance { color: #008000; } /* हरा */
+        .btn-consume { color: #0000ff; }     /* नीला */
+        .btn-status { color: #008080; }      /* टील (Teal) */
+        .btn-exit { color: #ff0000; }        /* लाल */
+
+        button:hover {
+            background-color: lightgreen;
+        }
+
+        /* दायां हिस्सा: आउटपुट डिस्प्ले बॉक्स */
+        .display-section {
+            width: 40%;
+            border: 3px solid darkred;
+            min-height: 440px;
+            max-height: 550px;
+            padding: 20px;
+            background-color: #FFFACD;
+            overflow-y: auto; /* लंबा लॉग होने पर स्क्रॉल बार आएगा */
+            font-family: monospace;
+            font-size: 12px;
+            color: black;
+            white-space: pre-wrap;
+			margin:20px;
+        }
+
+        /* बैक बटन स्टाइल */
+	.back-btn {
+    position: absolute; /* यह बटन को अपनी जगह पर लॉक रखेगा */
+    left: 10px;
+    display: inline-block;
+    text-decoration: none;
+    background-color: white;
+    color: red;
+	border: 1px solid lightgray;
+	box-shadow: 0px 8px 24px rgba(128, 128, 128, 0.2);
+
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    
+    transition: background 0.2s;
+}
+.header-container {
+    display: flex;
+    align-items: center;
+
+    width: 80%;
+    margin: 20px auto 30px auto; /* ऊपर और नीचे मार्जिन */
+    border-bottom: 2px solid #802a2a;
+    padding-bottom: 10px;
+    padding-bottom : 10px; /* बटन और हेडिंग के बीच की खाली जगह */
+}
+        
+    </style>
+</head>
+<body>
+    <!-- हेडिंग और बटन को एक लाइन में रखने के लिए कंटेनर -->
+    <div class="header-container">
+                <a href="../index.html#work" class="back-btn"> Back to Portfolio</a>
+
+
+        <h1 class="main-title">Smart Meter Prepaid</h1>
+    </div>
+
+    
+    <div class="container">
+        <!-- बायां इनपुट पैनल -->
+        <div class="form-section">
+            <div class="input-group">
+                <label>Enter Name</label>
+                <input type="text" id="userName" placeholder="e.g. SANAUL ISLAM">
+            </div>
+
+            <div class="input-group">
+                <label>Enter the Amount</label>
+                <input type="number" id="amountInput" placeholder="0.0">
+            </div>
+            <button class="btn-add-balance" onclick="addBalance()">Add Balance</button>
+
+            <div class="input-group" style="margin-top: 15px;">
+                <label>Enter the Units</label>
+                <input type="number" id="unitInput" placeholder="0.0">
+            </div>
+            <button class="btn-consume" onclick="unitConsume()">Unit Consume</button>
+
+            <button class="btn-status" style="margin-top: 15px;" onclick="checkStatus()">Status</button>
+            <button class="btn-exit" onclick="exitProject()">Exit</button>
+        </div>
+
+        <!-- दायां लॉग डिस्प्ले स्क्रीन -->
+        <div class="display-section" id="outputLog">Output details will appear here...</div>
+    </div>
+
+    <!-- मुख्य पोर्टफोलियो पर वापस जाने का बटन -->
+
+
+    <script>
+        // वेरिएबल्स सेटअप (बिजली दर: ₹7.00 प्रति यूनिट)
+        let currentBalance = 0.0;
+        let isInitialized = false;
+        const unitRate = 7.00; 
+        const outputLog = document.getElementById('outputLog');
+
+        // 1. बैलेंस जोड़ने का फंक्शन
+        function addBalance() {
+            const name = document.getElementById('userName').value.trim();
+            const amount = parseFloat(document.getElementById('amountInput').value);
+
+            if (!name) {
+                alert("कृपया पहले नाम दर्ज करें!");
+                return;
+            }
+
+            if (isNaN(amount) || amount <= 0) {
+                alert("कृपया एक वैध राशि दर्ज करें!");
+                return;
+            }
+
+            // पहली बार नाम सेट करना
+            if (!isInitialized) {
+                outputLog.innerHTML = `Name: ${name.toUpperCase()}\nCurrent Balance: ₹${currentBalance.toFixed(1)}\n-----------------------------------\n`;
+                isInitialized = true;
+            }
+
+            currentBalance += amount;
+
+            // लॉग अपडेट करना
+            outputLog.innerHTML += `Balance Added: ₹${amount.toFixed(1)}\nCurrent Balance: ₹${currentBalance.toFixed(1)}\n\n`;
+            document.getElementById('amountInput').value = ''; // इनपुट खाली करना
+            scrollLogToBottom();
+        }
+
+        // 2. यूनिट्स खर्च करने का फंक्शन
+        function unitConsume() {
+            if (!isInitialized) {
+                alert("कृपया पहले नाम दर्ज करें और बैलेंस जोड़ें!");
+                return;
+            }
+
+            const units = parseFloat(document.getElementById('unitInput').value);
+
+            if (isNaN(units) || units <= 0) {
+                alert("कृपया वैध यूनिट्स दर्ज करें!");
+                return;
+            }
+
+            const billAmount = units * unitRate;
+
+            outputLog.innerHTML += `Consumed Units: ${units.toFixed(1)}\nBill Amount: ₹${billAmount.toFixed(1)}\n`;
+
+            if (currentBalance >= billAmount) {
+                currentBalance -= billAmount;
+                outputLog.innerHTML += `Remaining Balance: ₹${currentBalance.toFixed(1)}\nElectricity Status: ON\n\n`;
+            } else {
+                // अगर बैलेंस कम है तो बिजली कट (OFF) हो जाएगी
+                outputLog.innerHTML += `Low Balance! Current: ₹${currentBalance.toFixed(1)}\nElectricity Status: OFF\n\n`;
+            }
+
+            document.getElementById('unitInput').value = ''; // इनपुट खाली करना
+            scrollLogToBottom();
+        }
+
+        // 3. वर्तमान स्टेटस चेक करने का फंक्शन
+        function checkStatus() {
+            if (!isInitialized) {
+                outputLog.innerHTML = "Smart Meter Status: NOT INITIALIZED (Please add balance first)\n\n";
+                return;
+            }
+            const status = currentBalance > 0 ? "ON" : "OFF";
+            outputLog.innerHTML += `--- CURRENT STATUS ---\nAvailable Balance: ₹${currentBalance.toFixed(1)}\nElectricity Status: ${status}\n\n`;
+            scrollLogToBottom();
+        }
+
+        // 4. एग्जिट/रीसेट फंक्शन
+        function exitProject() {
+            if (confirm("क्या आप इस सेशन को रीसेट करना चाहते हैं?")) {
+                currentBalance = 0.0;
+                isInitialized = false;
+                document.getElementById('userName').value = '';
+                document.getElementById('amountInput').value = '';
+                document.getElementById('unitInput').value = '';
+                outputLog.innerHTML = "Output details will appear here...";
+            }
+        }
+
+        // लॉग बॉक्स को हमेशा नीचे स्क्रॉल रखने के लिए
+        function scrollLogToBottom() {
+            outputLog.scrollTop = outputLog.scrollHeight;
+        }
+    </script>
+</body>
+</html>

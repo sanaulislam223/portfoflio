@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorting Visualizer - Live Demo</title>
+    <style>
+        body { background-color: #2c3e50; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .window { width: 500px; background-color: #008080; border: 4px solid #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-radius: 4px; padding: 20px; color: #fff; }
+        .title { text-align: center; color: #ffff00; font-size: 24px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; }
+        .subtitle { text-align: center; font-size: 12px; margin-bottom: 20px; color: #e0e0e0; }
+        label { display: block; color: #ffff00; font-weight: bold; margin-top: 15px; margin-bottom: 5px; }
+        select, input, textarea { width: 95%; padding: 8px; border: none; border-radius: 4px; font-size: 14px; margin-bottom: 10px; }
+        select { background-color: #fff; color: #000; font-weight: bold; }
+        textarea { background-color: #fff; color: #000; font-family: monospace; font-size: 13px; resize: none; height: 100px; }
+        .btn-enter { background-color: #ffeb3b; color: #000; font-weight: bold; border: none; padding: 10px; width: 100%; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .btn-clear { background-color: #ff0000; color: #fff; font-weight: bold; border: none; padding: 10px; width: 100%; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 5px; }
+        .back-btn { display: inline-block; margin-bottom: 15px; color: #fff; text-decoration: none; font-weight: bold; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="window">
+    <a href="../index.html#project" class="back-btn">⬅ Back to Portfolio</a>
+
+    <div class="title">Sorting Visualizer</div>
+    <div class="subtitle">Separating numbers based on commas (,) or spaces.</div>
+    
+    <label>Select Sorting</label>
+    <select id="algoSelect">
+        <option value="bubble">Bubble Sort</option>
+        <option value="selection">Selection Sort</option>
+        <option value="insertion">Insertion Sort</option>
+    </select>
+
+    <label>Sorted Number (Output Log)</label>
+    <textarea id="outputArea" readonly placeholder="Sorting output steps will appear here..."></textarea>
+
+    <label>Enter the sorting number</label>
+    <input type="text" id="numInput" placeholder="e.g. 5, 2, 9, 1, 5">
+
+    <button class="btn-enter" onclick="runVisualizer()">Enter</button>
+    <button class="btn-clear" onclick="clearFields()">Clear</button>
+</div>
+
+<script>
+function runVisualizer() {
+    let input = document.getElementById('numInput').value;
+    let algo = document.getElementById('algoSelect').value;
+    let output = document.getElementById('outputArea');
+    
+    if(!input.trim()) { alert('Please enter numbers!'); return; }
+
+    // Commas ya space se split karke numbers array banana
+    let arr = input.split(/[\s,]+/).map(Number).filter(n => !isNaN(n));
+    
+    output.value = "Initial Array: [ " + arr.join(", ") + " ]\n";
+    output.value += "Running " + algo.toUpperCase() + " SORT...\n\n";
+
+    if(algo === 'bubble') {
+        // Simple Simulation steps logic
+        for(let i=0; i<arr.length; i++) {
+            for(let j=0; j<arr.length-i-1; j++) {
+                if(arr[j] > arr[j+1]) {
+                    let temp = arr[j]; arr[j] = arr[j+1]; arr[j+1] = temp;
+                }
+            }
+            output.value += "Step " + (i+1) + ": [ " + arr.join(", ") + " ]\n";
+        }
+    } else {
+        arr.sort((a,b) => a-b);
+        output.value += "Final Sorted Array: [ " + arr.join(", ") + " ]\n";
+    }
+    output.value += "\nSorting Completed Successfully!";
+}
+
+function clearFields() {
+    document.getElementById('numInput').value = '';
+    document.getElementById('outputArea').value = '';
+}
+</script>
+
+</body>
+</html>

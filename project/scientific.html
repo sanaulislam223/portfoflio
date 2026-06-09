@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            gap: 20px;
+        }
+
+        /* हेडिंग और बटन कंटेनर */
+        .header-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 400px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .main-title {
+            color: #1c1c1c;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 0;
+            display: inline-block;
+            text-decoration: none;
+            background-color: #3b4cca;
+            color: white;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: #2a39a8;
+        }
+
+        /* कैलकुलेटर बॉक्स */
+        .calculator {
+            background-color: #1c1c1c;
+            width: 400px;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0px 10px 25px rgba(128, 128, 128, 0.3); /* ग्रे शैडो */
+        }
+
+        #display {
+            width: 100%;
+            height: 80px;
+            background-color: #1c1c1c;
+            border: none;
+            color: white;
+            text-align: right;
+            font-size: 32px;
+            padding: 10px;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* साइंटिफिक के लिए 5 कॉलम */
+            gap: 10px;
+        }
+
+        button {
+            height: 55px;
+            border-radius: 10px; /* थोड़े चौकोर/गोल बटन */
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        /* नंबर बटन */
+        .btn-number {
+            background-color: #333333;
+            color: white;
+        }
+
+        .btn-number:hover {
+            background-color: #444444;
+        }
+
+        /* सामान्य ऑपरेटर (+, -, *, /, =) */
+        .btn-operator {
+            background-color: #ff9f0a;
+            color: white;
+        }
+
+        .btn-operator:hover {
+            background-color: #cc7f08;
+        }
+
+        /* वैज्ञानिक ऑपरेटर (sin, cos, log, etc) */
+        .btn-sci {
+            background-color: #2c2c2e;
+            color: #ff9f0a;
+            font-size: 16px;
+        }
+
+        .btn-sci:hover {
+            background-color: #3a3a3c;
+        }
+
+        /* क्लियर और डिलीट बटन */
+        .btn-clear {
+            background-color: #a5a5a5;
+            color: black;
+        }
+
+        .btn-clear:hover {
+            background-color: #8e8e8e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <a href="../index.html#work" class="back-btn"> Back to Portfolio</a>
+
+
+        <h1 class="main-title">Scientific Calc</h1>
+    </div>
+
+    <div class="calculator">
+        <!-- डिस्प्ले स्क्रीन -->
+        <input type="text" id="display" readonly value="0">
+        
+        <!-- बटन ग्रिड -->
+        <div class="buttons">
+            <!-- पहली रो (वैज्ञानिक फंक्शन) -->
+            <button class="btn-sci" onclick="sciFunction('sin')">sin</button>
+            <button class="btn-sci" onclick="sciFunction('cos')">cos</button>
+            <button class="btn-sci" onclick="sciFunction('tan')">tan</button>
+            <button class="btn-clear" onclick="clearDisplay()">C</button>
+            <button class="btn-clear" onclick="deleteLast()">DEL</button>
+            
+            <!-- दूसरी रो -->
+            <button class="btn-sci" onclick="sciFunction('log')">log</button>
+            <button class="btn-sci" onclick="sciFunction('ln')">ln</button>
+            <button class="btn-sci" onclick="appendValue('π')">π</button>
+            <button class="btn-sci" onclick="sciFunction('sqrt')">√</button>
+            <button class="btn-operator" onclick="appendValue('/')">/</button>
+            
+            <!-- तीसरी रो -->
+            <button class="btn-sci" onclick="sciFunction('sq')">x²</button>
+            <button class="btn-number" onclick="appendValue('7')">7</button>
+            <button class="btn-number" onclick="appendValue('8')">8</button>
+            <button class="btn-number" onclick="appendValue('9')">9</button>
+            <button class="btn-operator" onclick="appendValue('*')">*</button>
+            
+            <!-- चौथी रो -->
+            <button class="btn-sci" onclick="sciFunction('fact')">n!</button>
+            <button class="btn-number" onclick="appendValue('4')">4</button>
+            <button class="btn-number" onclick="appendValue('5')">5</button>
+            <button class="btn-number" onclick="appendValue('6')">6</button>
+            <button class="btn-operator" onclick="appendValue('-')">-</button>
+            
+            <!-- पांचवीं रो -->
+            <button class="btn-sci" onclick="appendValue('(')">(</button>
+            <button class="btn-number" onclick="appendValue('1')">1</button>
+            <button class="btn-number" onclick="appendValue('2')">2</button>
+            <button class="btn-number" onclick="appendValue('3')">3</button>
+            <button class="btn-operator" onclick="appendValue('+')">+</button>
+            
+            <!-- छठी रो -->
+            <button class="btn-sci" onclick="appendValue(')')">)</button>
+            <button class="btn-number" onclick="appendValue('0')">0</button>
+            <button class="btn-number" onclick="appendValue('.')">.</button>
+            <button class="btn-operator" onclick="calculateResult()" style="grid-column: span 2; border-radius: 10px;">=</button>
+        </div>
+    </div>
+
+    <script>
+        const display = document.getElementById('display');
+
+        // इनपुट जोड़ने के लिए
+        function appendValue(value) {
+            if (display.value === '0' && value !== '.') {
+                display.value = value;
+            } else {
+                display.value += value;
+            }
+        }
+
+        // क्लियर करने के लिए
+        function clearDisplay() {
+            display.value = '0';
+        }
+
+        // एक अक्षर मिटाने के लिए
+        function deleteLast() {
+            if (display.value.length > 1) {
+                display.value = display.value.slice(0, -1);
+            } else {
+                display.value = '0';
+            }
+        }
+
+        // साइंटिफिक फंक्शन्स का लॉजिक
+        function sciFunction(type) {
+            let currentVal = parseFloat(display.value);
+            
+            if (isNaN(currentVal) && type !== 'sin' && type !== 'cos' && type !== 'tan') {
+                display.value = "Error";
+                return;
+            }
+
+            try {
+                switch(type) {
+                    case 'sin':
+                        display.value = Math.sin(currentVal * Math.PI / 180).toFixed(4); // Degrees to Radians
+                        break;
+                    case 'cos':
+                        display.value = Math.cos(currentVal * Math.PI / 180).toFixed(4);
+                        break;
+                    case 'tan':
+                        display.value = Math.tan(currentVal * Math.PI / 180).toFixed(4);
+                        break;
+                    case 'log':
+                        display.value = Math.log10(currentVal).toFixed(4);
+                        break;
+                    case 'ln':
+                        display.value = Math.log(currentVal).toFixed(4);
+                        break;
+                    case 'sqrt':
+                        display.value = Math.sqrt(currentVal);
+                        break;
+                    case 'sq':
+                        display.value = Math.pow(currentVal, 2);
+                        break;
+                    case 'fact':
+                        display.value = factorial(currentVal);
+                        break;
+                }
+            } catch (err) {
+                display.value = "Error";
+            }
+        }
+
+        // फैक्टोरियल निकालने का फंक्शन
+        function factorial(n) {
+            if (n < 0) return "Error";
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        // अंतिम परिणाम की गणना (=)
+        function calculateResult() {
+            try {
+                // π (Pi) को Math.PI मान में बदलना
+                let expression = display.value.replace(/π/g, Math.PI);
+                
+                // गणना करना
+                let finalResult = eval(expression);
+                display.value = finalResult;
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>

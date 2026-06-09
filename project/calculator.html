@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column; /* बटन को नीचे सेट करने के लिए */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            gap: 20px; /* कैलकुलेटर और बैक बटन के बीच की दूरी */
+        }
+
+        .calculator {
+            background-color: #1c1c1c; /* डार्क थीम */
+            width: 320px;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        #display {
+            width: 100%;
+            height: 70px;
+            background-color: #1c1c1c;
+            border: white ;
+            color: white;
+            text-align: right;
+            font-size: 40px;
+            padding: 10px;
+            margin-bottom: 40px;
+            
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            height: 60px;
+            border-radius: 50%; /* गोल बटन */
+            border: none;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        /* नंबर बटन */
+        .btn-number {
+            background-color: #333333;
+            color: white;
+        }
+
+        .btn-number:hover {
+            background-color: #444444;
+        }
+
+        /* ऑपरेटर बटन (+, -, *, /) */
+        .btn-operator {
+            background-color: #ff9f0a; /* ऑरेंज रंग */
+            color: white;
+        }
+
+        .btn-operator:hover {
+            background-color: #cc7f08;
+        }
+
+        /* क्लियर और डिलीट बटन */
+        .btn-clear {
+            background-color: pink;
+            color: black;
+        }
+
+        .btn-clear:hover {
+            background-color: #8e8e8e;
+        }
+
+.back-btn { display: inline-block; 
+				margin-bottom: 30px; color: black; 
+				text-decoration: none; 
+				font-weight: bold; 
+				font-size: 14px; 
+				border : 1px solid black}
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <!-- डिस्प्ले स्क्रीन -->
+        <input type="text" id="display" readonly value="0">
+        
+        <!-- बटन ग्रिड -->
+        <div class="buttons">
+            <button class="btn-clear" onclick="clearDisplay()">C</button>
+            <button class="btn-clear" onclick="deleteLast()">DEL</button>
+            <button class="btn-operator" onclick="appendValue('%')">%</button>
+            <button class="btn-operator" onclick="appendValue('/')">/</button>
+            
+            <button class="btn-number" onclick="appendValue('7')">7</button>
+            <button class="btn-number" onclick="appendValue('8')">8</button>
+            <button class="btn-number" onclick="appendValue('9')">9</button>
+            <button class="btn-operator" onclick="appendValue('*')">*</button>
+            
+            <button class="btn-number" onclick="appendValue('4')">4</button>
+            <button class="btn-number" onclick="appendValue('5')">5</button>
+            <button class="btn-number" onclick="appendValue('6')">6</button>
+            <button class="btn-operator" onclick="appendValue('-')">-</button>
+            
+            <button class="btn-number" onclick="appendValue('1')">1</button>
+            <button class="btn-number" onclick="appendValue('2')">2</button>
+            <button class="btn-number" onclick="appendValue('3')">3</button>
+            <button class="btn-operator" onclick="appendValue('+')">+</button>
+            
+            <button class="btn-number" onclick="appendValue('0')" style="grid-column: span 2; border-radius: 30px;">0</button>
+            <button class="btn-number" onclick="appendValue('.')">.</button>
+            <button class="btn-operator" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <!-- आपका बैक बटन यहाँ जोड़ा गया है (चूंकि फाइल project फोल्डर में है, इसलिए पाथ ../index.html किया गया है) -->
+    <a href="../index.html#project" class="back-btn">⬅ Back to Portfolio</a>
+
+
+    <script>
+        const display = document.getElementById('display');
+
+        // स्क्रीन पर नंबर या ऑपरेटर जोड़ने के लिए
+        function appendValue(value) {
+            if (display.value === '0' && value !== '.') {
+                display.value = value;
+            } else {
+                display.value += value;
+            }
+        }
+
+        // स्क्रीन को पूरी तरह साफ करने के लिए (C)
+        function clearDisplay() {
+            display.value = '0';
+        }
+
+        // आखिरी अक्षर को मिटाने के लिए (DEL)
+        function deleteLast() {
+            if (display.value.length > 1) {
+                display.value = display.value.slice(0, -1);
+            } else {
+                display.value = '0';
+            }
+        }
+
+        // गणना (Calculation) करने के लिए (=)
+        function calculateResult() {
+            try {
+                // eval() फंक्शन स्ट्रिंग में लिखे मैथ को हल कर देता है
+                display.value = eval(display.value);
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>
