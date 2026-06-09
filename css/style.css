@@ -469,7 +469,7 @@ body.offcanvas {
 .hire {
   padding: 2em;
   border-bottom: 3px solid #ADFF2F;
-  background: #FF1493;
+  background: #00BFFF;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.10), 0 6px 6px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease
    }
@@ -1659,9 +1659,9 @@ body.dark-mode #colorlib-hero .flexslider .slider-text > .slider-text-inner h2 {
 
 /* --- लाइट मोड में बटन का रंग (Light Style) --- */
 .theme-btn-circle {
-    background-color: #f0f4f8 !important; /* हल्का साफ़ बैकग्राउंड */
+    background-color: white !important; /* हल्का साफ़ बैकग्राउंड */
     color: #333333 !important;
-    border: 1px solid #d0d7de !important;
+   
 }
 
 /* --- डार्क मोड एक्टिव होने पर बटन का रंग (Dark Style) --- */
@@ -1892,3 +1892,18 @@ body.dark-mode #colorlib-aside .colorlib-footer ul li a {
 
 
 
+/* मोबाइल और छोटी स्क्रीन के लिए */
+@media (max-width: 768px) {
+    #colorlib-hero .flexslider .slider-text > .slider-text-inner h1 {
+        font-size: 60px !important; /* मोबाइल के लिए सही साइज */
+        line-height: 1.2 !important;
+        color: #0000CD !important;
+
+
+    }
+	
+	#colorlib-hero .flexslider .slider-text > .slider-text-inner .btn.btn-learn {
+    color: #0000CD;
+    border: 2px solid #0000CD;
+    background: transparent !important;
+}
