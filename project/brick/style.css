@@ -1,0 +1,108 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    touch-action: none;
+}
+
+body {
+    background: #0d0d1a;
+    color: #00f0ff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+#ui-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    height: 700px;
+    border: 3px solid #00f0ff;
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+    background: #050510;
+    display: flex;
+    flex-direction: column;
+}
+
+.metrics-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #ff007f;
+    background: rgba(5, 5, 16, 0.8);
+    text-shadow: 0 0 5px #00f0ff;
+    z-index: 2;
+}
+
+#lives-display {
+    color: #ff007f;
+    text-shadow: 0 0 5px #ff007f;
+}
+
+canvas {
+    width: 100%;
+    flex: 1;
+    display: block;
+    background: #05050f;
+    z-index: 1;
+}
+
+.panel {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 5, 16, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    z-index: 10;
+    padding: 20px;
+    text-align: center;
+}
+
+.panel.hidden {
+    display: none !important;
+}
+
+#title {
+    font-size: 2.2rem;
+    letter-spacing: 3px;
+    text-shadow: 0 0 15px #00f0ff;
+    color: #00f0ff;
+}
+
+#subtitle {
+    color: #8fa0dd;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+#action-btn {
+    background: #120e2e;
+    border: 2px solid #ff007f;
+    color: #ff007f;
+    padding: 12px 35px;
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255, 0, 127, 0.4);
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+#action-btn:hover {
+    background: #ff007f;
+    color: #fff;
+    box-shadow: 0 0 20px #ff007f;
+}
