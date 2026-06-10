@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     user-select: none;
+    touch-action: none;
 }
 
 body {
@@ -36,11 +37,17 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 15px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: bold;
     text-shadow: 0 0 5px #00ffcc;
     z-index: 5;
     background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+}
+
+.score-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 canvas {
@@ -49,7 +56,6 @@ canvas {
     display: block;
 }
 
-/* Naye Buttons ka CSS */
 .speed-controls {
     height: 72px;
     background: #0f172a;
@@ -124,7 +130,7 @@ canvas {
 #subtitle {
     color: #8892b0;
     font-size: 0.9rem;
-    line-height: 1.4;
+    line-height: 1.6;
 }
 
 #action-btn {
