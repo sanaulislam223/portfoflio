@@ -1,6 +1,7 @@
 const canvas = document.getElementById('stage');
 const ctx = canvas.getContext('2d');
 const scoreCard = document.getElementById('score-card');
+const highScoreCard = document.getElementById('high-score-card');
 const shieldCard = document.getElementById('shield-card');
 const modal = document.getElementById('modal');
 const title = document.getElementById('title');
@@ -20,9 +21,21 @@ resizeStage();
 let state = {
     running: false,
     score: 0,
+    highScore: 0,
     shield: 100,
     level: 1
 };
+
+// Update 1: Local Storage High Score system functions
+function loadHighScore() {
+    const savedScore = localStorage.getItem('spaceDodgerHighScore');
+    if (savedScore) {
+        state.highScore = parseInt(savedScore, 10);
+    } else {
+        state.highScore = 0;
+    }
+    highScoreCard.textContent = `HI-SCORE: ${String(state.highScore).padStart(4, '0')}`;
+}
 
 const input = { ArrowLeft: false, ArrowRight: false };
 
@@ -31,7 +44,7 @@ const pilot = {
     y: 0,
     w: 34,
     h: 34,
-    speed: 5,
+    speed: 8, // Initial baseline speed configurations
     reset: function() {
         this.x = canvas.width / 2 - this.w / 2;
         this.y = canvas.height - 70;
@@ -41,7 +54,6 @@ const pilot = {
 let obstacles = [];
 let stars = [];
 
-// FPS Tracking Matrix
 let lastTime = 0;
 const fpsTarget = 60;
 const fpsInterval = 1000 / fpsTarget;
@@ -58,25 +70,21 @@ function initStars() {
     }
 }
 
-// --- DESKTOP CONTROLS (Keyboard listeners) ---
 window.addEventListener('keydown', (e) => { if(e.key in input) input[e.key] = true; });
 window.addEventListener('keyup', (e) => { if(e.key in input) input[e.key] = false; });
 actionBtn.addEventListener('click', bootGame);
 
-// --- MOBILE CONTROLS (Touch Drag Interface) ---
 let isDragging = false;
 
-// Ungli screen par rakhte hi coordinate calibrate hoga
 canvas.addEventListener('touchstart', (e) => {
     if (!state.running) return;
     isDragging = true;
     handleTouchMove(e);
 }, { passive: false });
 
-// Drag gesture updates coordinate alignment vectors
 canvas.addEventListener('touchmove', (e) => {
     if (!state.running || !isDragging) return;
-    e.preventDefault(); // Mobile page bounce / scroll scroll off karne ke liye
+    e.preventDefault();
     handleTouchMove(e);
 }, { passive: false });
 
@@ -88,32 +96,30 @@ function handleTouchMove(e) {
     const rect = canvas.getBoundingClientRect();
     const touch = e.touches[0];
     
-    // Canvas coordinate space scale ratios calculation
     const relativeX = touch.clientX - rect.left;
     const scaleX = canvas.width / rect.width;
     const targetCanvasX = relativeX * scaleX;
     
-    // Ship ko smooth movement dene ke liye touch ke center point par alignment map kiya
     let destinationX = targetCanvasX - pilot.w / 2;
     
-    // Collision detection walls layout tracking boundaries
     if (destinationX < 0) destinationX = 0;
     if (destinationX > canvas.width - pilot.w) destinationX = canvas.width - pilot.w;
     
     pilot.x = destinationX;
 }
 
-// Speed configuration panels handlers
+// Update 2: Slower buttons subtract multi-ticks safely
 slowBtn.addEventListener('click', () => {
-    if (pilot.speed > 1) {
-        pilot.speed -= 1;
+    if (pilot.speed > 2) {
+        pilot.speed -= 2;
         speedIndicator.textContent = `SPEED: ${pilot.speed}`;
     }
 });
 
+// Update 2: Faster buttons scale up aggressively up to 35
 fastBtn.addEventListener('click', () => {
-    if (pilot.speed < 12) {
-        pilot.speed += 1;
+    if (pilot.speed < 35) {
+        pilot.speed += 3;
         speedIndicator.textContent = `SPEED: ${pilot.speed}`;
     }
 });
@@ -129,6 +135,7 @@ function bootGame() {
     shieldCard.textContent = "SHIELD: 100%";
     pilot.reset();
     initStars();
+    loadHighScore();
     
     lastTime = performance.now();
     runEngine(lastTime);
@@ -139,9 +146,20 @@ function triggerGameOver() {
     title.textContent = "MISSION FAILED";
     title.style.color = "#ff0055";
     title.style.textShadow = "0 0 10px #ff0055";
-    subtitle.innerHTML = `Asteroids breached your hull.<br>Final Score: <strong>${state.score}</strong>`;
+    
+    let isNewRecord = false;
+    if (state.score > state.highScore) {
+        state.highScore = state.score;
+        localStorage.setItem('spaceDodgerHighScore', state.highScore);
+        isNewRecord = true;
+    }
+
+    let recordText = isNewRecord ? `<br><span style="color: #ffb703; font-weight: bold; text-shadow: 0 0 8px #ffb703;">★ NEW HIGH SCORE! ★</span>` : '';
+    subtitle.innerHTML = `Asteroids breached your hull.<br>Final Score: <strong>${state.score}</strong>${recordText}<br>Best Flight: <strong>${state.highScore}</strong>`;
+    
     actionBtn.textContent = "RETRY FLIGHT";
     modal.classList.remove('hidden');
+    loadHighScore();
 }
 
 function processPhysics() {
@@ -162,7 +180,6 @@ function processPhysics() {
 
     state.level = 1 + Math.floor(state.score / 800);
 
-    // Keyboard navigation fallbacks runtime tracking loops
     if (input.ArrowLeft && pilot.x > 0) pilot.x -= pilot.speed;
     if (input.ArrowRight && pilot.x < canvas.width - pilot.w) pilot.x += pilot.speed;
 
@@ -250,5 +267,6 @@ function runEngine(currentTime) {
     }
 }
 
+loadHighScore();
 initStars();
 renderStage();
