@@ -400,3 +400,33 @@ body.dark-mode textarea::placeholder {
 .brand-text p {
     margin: 2px 0 0 0;
 }
+
+
+
+
+/* 📱 Mobile view me buttons ko takrane se rokne ke liye settings */
+@media (max-width: 768px) {
+    /* 1. Buttons ke parent container ko target karein */
+    .filter-buttons-container, 
+    div:has(> button[id*="filter"]), 
+    div:has(> button:contains("All")) { 
+        display: flex !important;
+        flex-direction: row !important; /* Ek hi line me rakhne ke liye */
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 6px !important;            /* Buttons ke beech ki fixed safe doori */
+        flex-wrap: nowrap !important;   /* Ek dusre ke upar-niche jaane se rokega */
+        width: 100% !important;
+        padding: 0 10px !important;
+    }
+
+    /* 2. All, Lost, Found buttons ka size mobile ke hisab se responsive karne ke liye */
+    .filter-buttons-container button,
+    button[id*="lost"], button[id*="found"], button[id*="all"] {
+        padding: 6px 12px !important;  /* Mobile screen ke liye padding thodi kam ki */
+        font-size: 12px !important;    /* Text size perfect read hone ke liye */
+        flex: 1 !important;            /* Teeno buttons barabar space lengi */
+        min-width: 65px !important;    /* Kam se kam itni width rahegi taaki text na kate */
+        white-space: nowrap !important;/* Text ko break hone se rokega */
+    }
+}
