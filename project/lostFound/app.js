@@ -13,8 +13,8 @@ let selectedImageBase64 = ""; // इमेज डेटा स्टोर क�
 
 // ब्राउज़र लोकल स्टोरेज डेटाबेस सिस्टम (डिफ़ॉल्ट कार्ड्स के साथ)
 let campusItems = JSON.parse(localStorage.getItem('campus_items')) || [
-    { title: "College ID Card", description: "Blue ribbon, CSE Department", type: "Lost", location: "Aala Hazrat Gate", contact: "9876543210", image: "", time: "11 Jun, 01:30 AM" },
-    { title: "Water Bottle", description: "Milton Steel bottle, Black color", type: "Found", location: "Noori Masjid", contact: "Security Guard Office", image: "", time: "11 Jun, 01:15 AM" }
+    { title: "College ID Card", description: "Blue ribbon, ", type: "Lost", location: "Aala Hazrat Gate", contact: "9912345678", image: "", time: "11 Jun, 01:30 AM" },
+    { title: "Watch", description: "Sonata, Black color", type: "Found", location: "Noori Masjid", contact: "8090703870", image: "", time: "11 Jun, 01:15 AM" }
 ];
 
 // 1. इमेज चुनने पर उसका प्रीव्यू (Preview) दिखाने का लॉजिक
