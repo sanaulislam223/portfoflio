@@ -1,0 +1,402 @@
+:root {
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --primary-color: #007bff;
+    --lost-color: #dc3545;
+    --found-color: #28a745;
+    --border-color: #dddddd;
+}
+
+.dark-mode {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #f5f5f5;
+    --border-color: #333333;
+}
+
+body {
+    margin: 0;
+    font-family: "Stardos Stencil", antique;
+    background-color: #f8f9fa;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+/* Navbar (पतला और व्यवस्थित करने के लिए अपडेटेड) */
+/* Fixed & Sticky Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 20px;
+    background-color: var(--card-bg);
+    border-bottom: 2px solid #00ffcc);
+
+	box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+    
+    /* नेवबार को ऊपर फिक्स करने के लिए ये 4 लाइन्स जोड़ी गई हैं */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* यह सुनिश्चित करेगा कि नेवबार हमेशा कार्ड्स के ऊपर रहे */
+}
+
+
+
+
+.logo { 
+    font-size: 1.3rem; 
+    font-weight: bold; 
+    line-height: 1.2;
+}
+/* लोगो के नीचे वाले <p> टैग की एक्स्ट्रा जगह हटाने के लिए */
+.logo p {
+    margin: 2px 0 0 0 !important; 
+    padding: 0;
+}
+
+/* राइट साइड के कंट्रोल्स को एक लाइन में रखने के लिए */
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* भाषा बदलने वाला बटन (New Style) */
+.lang-switcher button {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 5px 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.lang-switcher button:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+#theme-toggle {
+    background: none; 
+    border: none; 
+    font-size: 2rem; 
+    cursor: pointer; 
+    color: var(--text-color);
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Layout */
+.main-container {
+    display: flex; padding: 30px; gap: 30px; max-width: 1300px; margin: 0 auto;
+}
+.sidebar-form {
+    flex: 1; 
+	background: var(--card-bg); 
+	padding: 25px; 
+	border-radius: 10px;
+	border: 1px solid #00ffcc;
+	box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+	height: fit-content;
+}
+.content-feed { flex: 2; }
+
+/* Form Elements */
+form input, form textarea, form select {
+    width: 100%; 
+	padding: 10px; 
+	margin-bottom: 20px; 
+	border: 1px solid #00ffcc;
+    border-radius: 6px; 
+	font-size:16px;
+	background: white; 
+	color:black; 
+	box-sizing: border-box;
+	box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+}
+#submit-btn {
+    width: 100%; padding: 12px; background: #00ffcc; color: black;
+    border: none; border-radius: 6px; curso:root {
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-color: #333333;
+    --primary-color: #007bff;
+    --lost-color: #dc3545;
+    --found-color: #28a745;
+    --border-color: #dddddd;
+}
+
+.dark-mode {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #f5f5f5;
+    --border-color: #333333;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+/* Navbar (स्लिम और पतला नेवबार) */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 20px;
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+.logo { 
+    font-size: 1.3rem; 
+    font-weight: bold; 
+    line-height: 1.2;
+}
+.logo p {
+    margin: 2px 0 0 0 !important; 
+    padding: 0;
+}
+
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* भाषा बदलने वाला सुंदर बटन */
+.lang-switcher button {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 5px 14px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.lang-switcher button:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+#theme-toggle {
+    background: none; 
+    border: none; 
+    font-size: 1.5rem; 
+    cursor: pointer; 
+    color: var(--text-color);
+}
+
+/* Layout */
+.main-container {
+    display: flex; padding: 30px; gap: 30px; max-width: 1300px; margin: 0 auto;
+}
+.sidebar-form {
+    flex: 1; background: var(--card-bg); padding: 25px; border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); height: fit-content;
+}
+.content-feed { flex: 2; }
+
+/* Form Elements */
+form input, form textarea, form select {
+    width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border-color);
+    border-radius: 6px; background: var(--bg-color); color: var(--text-color); box-sizing: border-box;
+}
+#submit-btn {
+    width: 100%; padding: 12px; background: var(--primary-color); color: white;
+    border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
+}
+
+/* Filters & Grid */
+.feed-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+}
+.filter-btn {
+    padding: 8px 16px; margin-left: 5px; border: 1px solid var(--border-color);
+    background: var(--card-bg); color: var(--text-color); border-radius: 20px; cursor: pointer;
+}
+.filter-btn.active { background: var(--primary-color); color: white; }
+
+.items-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+}
+
+/* Cards */
+.item-card {
+    background: var(--card-bg); border: 1px solid var(--border-color);
+    padding: 20px; border-radius: 10px; position: relative;
+}
+.badge {
+    position: absolute; top: 15px; right: 15px; padding: 4px 10px;
+    border-radius: 20px; color: white; font-size: 0.8rem; font-weight: bold;
+}
+.badge.lost { background-color: var(--lost-color); }
+.badge.found { background-color: var(--found-color); }
+
+.loading {
+    padding: 20px; text-align: center; font-size: 1.1rem; color: #888; grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+    .main-container { flex-direction: column; padding: 15px; }
+    .items-grid { grid-template-columns: 1fr; }
+}
+r: pointer; font-weight: bold;
+}
+
+/* Filters & Grid */
+.feed-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+}
+.filter-btn {
+    padding: 10px 20px; 
+	margin-left: 5px; 
+    background: var(--card-bg); 
+	color: var(--text-color); 
+	border-radius: 20px; 
+	cursor: pointer;
+	color:#7FFF00;
+	font-weight:700;
+	border: 1.5px solid #00ffcc;
+	box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+}
+.filter-btn.active { 
+background: #00ffcc; 
+color: white;
+	border: 1px solid #00ffcc;
+	box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); }
+
+.items-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+}
+
+/* Cards */
+.item-card {
+    background: var(--card-bg);
+	border: 1px solid #00ffcc;
+    padding: 20px; 
+	border-radius: 10px; 
+	position: relative;
+	box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+}
+.badge {
+    position: absolute; top: 15px; right: 15px; padding: 4px 10px;
+    border-radius: 20px; color: white; font-size: 0.8rem; font-weight: bold;
+}
+.badge.lost { background-color: var(--lost-color); }
+.badge.found { background-color: var(--found-color); }
+
+@media (max-width: 768px) {
+    .main-container { flex-direction: column; padding: 15px; }
+    .items-grid { grid-template-columns: 1fr; }
+}
+
+
+
+
+
+
+/* इमेज अपलोड बटन की स्टाइलिंग */
+.custom-file-upload {
+    display: block;
+    padding: 10px;
+    background: var(--bg-color);
+    border: 2px dashed #00ffcc;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+	box-shadow: 0 0 10px rgba(0, 255, 204, 0.20);
+}
+.custom-file-upload:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* मोबाइल रिस्पॉन्सिव लेआउट (खासकर मोबाइल स्क्रीन्स के लिए) */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+        text-align: center;
+    }
+    .main-container {
+        flex-direction: column;
+        padding: 15px;
+        gap: 20px;
+    }
+    .items-grid {
+        grid-template-columns: 1fr !important; /* मोबाइल में कार्ड्स एक के नीचे एक दिखेंगे */
+    }
+    .logo {
+        font-size: 1.1rem;
+    }
+    .logo p {
+        font-size: 14px !important;
+    }
+}
+
+/* 1. Jab body par .dark-mode class active ho */
+body.dark-mode {
+    background-color: #121212 !important; /* Pure dark color pure page ke liye */
+    color: #ffffff !important;            /* Pure page ka default text white */
+}
+
+/* 2. Dark mode me sabhi Input fields aur Textarea ke liye */
+body.dark-mode input[type="text"],
+body.dark-mode input[type="tel"],
+body.dark-mode select,
+body.dark-mode textarea {
+    background-color: #222222 !important; /* Input box dark karne ke liye */
+    color: #ffffff !important;            /* Input ke andar ka text white karne ke liye */
+    border: 1px solid #444444 !important; /* Halka border visibility ke liye */
+}
+
+/* 3. Dropdown (Select) ke andar ke options ko dark karne ke liye */
+body.dark-mode select option {
+    background-color: #222222 !important;
+    color: #ffffff !important;
+}
+
+/* 4. Input fields ke andar ke placeholder text ka color */
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #aaaaaa !important;
+}
+/* Logo aur text ko side-by-side align karne ke liye */
+.logo-container {
+    display: flex;
+    align-items: center; /* Vertical alignment center karne ke liye */
+    gap: 12px;           /* Logo aur text ke beech ki doori */
+}
+
+/* Logo image ka size control karne ke liye */
+.nav-logo {
+    width: 50px;         /* Aap logo ke hisab se width badha ya ghata sakte hain */
+    height: 50px;        /* Aspect ratio maintain rakhne ke liye auto bhi rakh sakte hain */
+    object-fit: contain; /* Image stretch na ho isliye */
+    border-radius: 5px;  /* Agar logo round ya curved chahiye toh */
+}
+
+/* Brand text margin fix karne ke liye */
+.brand-text h1 {
+    margin: 0;
+    font-size: 20px;     /* Heading size standard rakhne ke liye */
+}
+.brand-text p {
+    margin: 2px 0 0 0;
+}

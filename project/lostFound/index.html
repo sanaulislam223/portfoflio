@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raza Nagar Lost & Found</title>
+    
+    <!-- CSS फ़ाइल लिंक -->
+    <link rel="stylesheet" href="style.css">
+	<!-- index.html के <head> के अंदर इसे पेस्ट करें -->
+<link rel="manifest" href="manifest.json">
+
+	<style>
+	
+/* मुख्य कंटेनर (मार्जिन को 70px से बढ़ाकर 120px किया गया है) */
+.main-container {
+    display: flex; 
+    padding: 30px; 
+    gap: 30px; 
+    max-width: 1300px; 
+    margin: 55px auto 0 auto; /* ऊपर 120px की खाली जगह दी है ताकि कुछ भी न छुपे */
+}
+
+/* मोबाइल स्क्रीन के लिए भी मार्जिन सेट करना ज़रूरी है ताकि मोबाइल में भी बटन न छुपे */
+@media (max-width: 768px) {
+    .main-container { 
+        flex-direction: column; 
+        padding: 15px; 
+        margin-top: 160px; /* मोबाइल में नेवबार बड़ा हो जाता है, इसलिए यहाँ 160px मार्जिन दिया है */
+    }
+    .items-grid { 
+        grid-template-columns: 1fr !important; 
+    }
+}
+	</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo-container">
+        <!-- Logo Image: iski path sahi rakhein -->
+        <img src="logo.png" alt="Raza Nagar Logo" class="nav-logo">
+        
+        <div class="brand-text">
+            <h1>Raza Nagar Lost & Found</h1>
+            <p>Only for Raza Nagar Adari</p>
+        </div>
+    </div>
+		
+        <div class="nav-controls">
+            <div class="lang-switcher">
+                <button id="lang-btn">हिंदी</button>
+            </div>
+            <button id="theme-toggle">☾</button>
+        </div>
+    </nav>
+	
+	
+<div class="responsive-ticker-bar">
+    <marquee direction="left" scrollamount="8" onmouseover="this.stop();" onmouseout="this.start();">
+        📢 ताज़ा खबर: रज़ा नगर अदरी की वेबसाइट अब लाइव हो चुकी है! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 🔍 Latest Update: Kisi bhi saaman ke milne par turant report karein.
+    </marquee>
+</div>
+
+
+
+<style>
+.responsive-ticker-bar {
+    position: fixed;         /* ⚡ Isse news patti ek jagah fix ho jayegi */
+    top: 90px;              /* 💻 Laptop me navbar ke thik niche set karne ke liye */
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    background-color: none;
+    color: #000000;
+    padding: 2px 0;
+    font-weight: 400;
+    font-size: 15px;
+    border-bottom: none;
+    z-index: 999;            /* Navbar ke niche aur main content ke upar rahega */
+}
+
+
+/* 🌙 DARK MODE EFFECTS */
+body.dark-mode .responsive-ticker-bar {
+    background-color: none !important; 
+    border-bottom: none !important;
+}
+body.dark-mode .responsive-ticker-bar marquee {
+    color: #00ffcc !important; /* Dark mode me text white karne ke liye */
+}
+
+/* 📱 MOBILE RESPONSIVE SETTINGS (Jab screen choti ho) */
+@media (max-width: 768px) {
+    .responsive-ticker-bar {
+        margin-top: 30px !important;  /* 📱 Mobile navbar ke hisab se position auto adjust hogi */
+        font-size: 13px !important;
+        padding: 8px 0 !important;
+    }
+}
+
+/* ⚠️ Zaroori Note: Kyunki ticker ab fixed hai, isliye main content ko thoda niche push karna padega */
+body {
+    padding-top: 60px; /* Apne layout ke hisab se ise badha ya ghata sakte hain */
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+    <div class="main-container">
+        <!-- बायाँ हिस्सा: फॉर्म -->
+        <div class="sidebar-form">
+            <h2 data-en="📢 Report Item" data-hi="📢 सामान की रिपोर्ट करें">📢 Report Item</h2>
+            <form id="report-form">
+                <input type="text" id="item-title" placeholder="Item Name (e.g., Keys, Wallet)" data-en-placeholder="Item Name (e.g., Keys, Wallet)" data-hi-placeholder="वस्तु का नाम (जैसे- चाबी, वॉलेट)" required>
+                <textarea id="item-desc" placeholder="Description (Color, brand, etc.)" data-en-placeholder="Description (Color, brand, etc.)" data-hi-placeholder="विवरण (रंग, ब्रांड आदि)" required></textarea>
+                
+                <!-- नया फोटो अपलोड बटन -->
+                <div class="image-upload-container">
+                    <label for="item-image" class="custom-file-upload" data-en="📸 Attach Photo (Camera / Gallery)" data-hi="📸 फोटो जोड़ें (कैमरा / गैलरी)">
+                        📸 Attach Photo (Camera / Gallery)
+                    </label>
+                    <input type="file" id="item-image" accept="image/*" capture="environment" style="display: none;">
+                    
+                    <!-- फोटो का प्रीव्यू दिखाने के लिए बॉक्स -->
+                    <div id="image-preview-container" style="display: none; margin-bottom: 15px; text-align: center;">
+                        <img id="image-preview" src="" alt="Preview" style="max-width: 100%; max-height: 150px; border-radius: 6px; border: 1px solid var(--border-color);">
+                    </div>
+                </div>
+
+                <select id="item-type" required>
+                    <option value="Lost" data-en="I Lost Something ❌" data-hi="मेरा कुछ खो गया है ❌">I Lost Something ❌</option>
+                    <option value="Found" data-en="I Found Something 🟩" data-hi="मुझे कुछ मिला है 🟩">I Found Something 🟩</option>
+                </select>
+
+                <select id="item-location" required>
+                    <option value="" data-en="Select Location" data-hi="स्थान चुनें">Select Location</option>
+                    <option value="Aala Hazrat Gate" data-en="Aala Hazrat Gate" data-hi="आला हज़रत गेट">Aala Hazrat Gate</option>
+                    <option value="Raza Nagar Transformer" data-en="Raza Nagar Transformer" data-hi="रज़ा नगर ट्रांसफार्मर">Raza Nagar Transformer</option>
+                    <option value="Noori Masjid" data-en="Noori Masjid" data-hi="नूरी मस्जिद">Noori Masjid</option>
+                    <option value="Mumtaz Hotal" data-en="Mumtaz Hotal" data-hi="मुमताज़ होटल">Mumtaz Hotal</option>
+                    <option value="Madarsa Niswan" data-en="Madarsa Niswan" data-hi="मदरसा निस्वान">Madarsa Niswan</option>
+                    <option value="Qassab Tola" data-en="Qassab Tola" data-hi="कस्साब टोला">Qassab Tola</option>
+                    <option value="Raza Nagar Ground" data-en="Raza Nagar Ground" data-hi="रज़ा नगर ग्राउंड">Raza Nagar Ground</option>
+                    <option value="Raza Nagar Tanpayi" data-en="Raza Nagar Tanpayi" data-hi="रज़ा नगर तन्पयी">Raza Nagar Tanpayi</option>
+                    <option value="Behind Madarsa Ziyaul uloom" data-en="Behind Madarsa Ziyaul uloom" data-hi="मदरसा ज़ियाउल उलूम के पीछे">Behind Madarsa Ziyaul uloom</option>
+                    <option value="Gate Madarsa Ziyaul uloom" data-en="Gate Madarsa Ziyaul uloom" data-hi="मदरसा ज़ियाउल उलूम गेट">Gate Madarsa Ziyaul uloom</option>
+                    <option value="Raza Nagar khor" data-en="Raza Nagar khor" data-hi="रज़ा नगर खोर">Raza Nagar khor</option>
+                </select>
+
+                <input type="text" id="reporter-contact" placeholder="Your Phone or Email" data-en-placeholder="Your Phone or Email" data-hi-placeholder="आपका फोन या ईमेल" required>
+                <button type="submit" id="submit-btn" data-en="Submit Report" data-hi="रिपोर्ट सबमिट करें">Submit Report</button>
+            </form>
+        </div>
+
+        <!-- दायाँ हिस्सा: लाइव फीड -->
+        <div class="content-feed">
+            <div class="feed-header">
+                <h2 data-en="🕒 Recent Reports" data-hi="🕒 हालिया रिपोर्ट्स">🕒 Recent Reports</h2>
+                <div class="filters">
+                    <button class="filter-btn active" id="filter-all" data-en="All" data-hi="सभी">All</button>
+                    <button class="filter-btn" id="filter-lost" data-en="Lost" data-hi="खोया">Lost</button>
+                    <button class="filter-btn" id="filter-found" data-en="Found" data-hi="पाया">Found</button>
+                </div>
+            </div>
+            <div id="items-grid" class="items-grid"></div>
+        </div>
+    </div>
+
+    <!-- इमेज को फुल स्क्रीन में दिखाने के लिए Modal पॉप-अप बॉक्स -->
+    <div id="imageModal" style="display: none; position: fixed; z-index: 2000; padding-top: 100px; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.9);">
+        <!-- बंद करने का बटन (X) -->
+        <span onclick="closeModal()" style="position: absolute; top: 30px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s;">&times;</span>
+        <!-- बड़ी होने वाली इमेज -->
+        <img id="modalImg" style="margin: auto; display: block; max-width: 80%; max-height: 80%; border-radius: 8px; box-shadow: 0 4px 15px rgba(255,255,255,0.2);">
+    </div>
+
+    <!-- JavaScript फ़ाइल लिंक -->
+    <script src="app.js"></script>
+</body>
+
+</body>
+</html>
