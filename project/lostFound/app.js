@@ -12,10 +12,32 @@ let currentFilter = 'All';
 let selectedImageBase64 = ""; // इमेज डेटा स्टोर करने के लिए वेरिएबल
 
 // ब्राउज़र लोकल स्टोरेज डेटाबेस सिस्टम (डिफ़ॉल्ट कार्ड्स के साथ)
-let campusItems = JSON.parse(localStorage.getItem('campus_items')) || [
-    { title: "College ID Card", description: "Blue ribbon, ", type: "Lost", location: "Aala Hazrat Gate", contact: "9912345678", image: "", time: "11 Jun, 01:30 AM" },
-    { title: "Watch", description: "Sonata, Black color", type: "Found", location: "Noori Masjid", contact: "8090703870", image: "", time: "11 Jun, 01:15 AM" }
-];
+// // ⚡ 1. Firebase Firestore se live cards fetch karne ka logic
+let campusItems = []; // Shuruat me khali array rakhein
+
+// Real-time listener: Laptop aur mobile ko har second sync rakhega
+db.collection("campus_items").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+    campusItems = []; // Purana array clear karein
+    
+    snapshot.forEach((doc) => {
+        let itemData = doc.data();
+        itemData.id = doc.id; // Unique document ID save ki
+        campusItems.push(itemData);
+    });
+    
+    // Agar database me koi data na ho, toh default dummy cards dikhane ke liye logic
+    if (campusItems.length === 0) {
+        campusItems = [
+            { id: "default1", title: "College ID Card", description: "Blue ribbon, ", type: "Lost", location: "Aala Hazrat Gate", contact: "9912345678", image: "", time: "11 Jun, 01:30 AM" },
+            { id: "default2", title: "Watch", description: "Sonata, Black color", type: "Found", location: "Noori Masjid", contact: "8090703870", image: "", time: "11 Jun, 01:15 AM" }
+        ];
+    }
+    
+    if (typeof renderItems === "function") {
+        renderItems();
+    }
+});
+
 
 // 1. इमेज चुनने पर उसका प्रीव्यू (Preview) दिखाने का लॉजिक
 if (itemImageInput) {
@@ -91,15 +113,21 @@ if (reportForm) {
             time: dateTimeString // समय यहाँ सेव होगा
         };
         
-        campusItems.unshift(newItem); // नए कार्ड को सबसे ऊपर जोड़ें
-        localStorage.setItem('campus_items', JSON.stringify(campusItems)); // लोकल मेमोरी में सेव
-        
-        alert(currentLang === 'en' ? "Report Submitted! 🎉" : "रिपोर्ट सबमिट हो गई! 🎉");
-        
-        // फॉर्म और इमेज प्रीव्यू रीसेट करें
-        reportForm.reset();
-        if (imagePreviewContainer) imagePreviewContainer.style.display = "none";
-        selectedImageBase64 = "";
+                // // ⚡ 2. Local storage hatakar direct Firebase Firestore me live push karne ka logic
+        db.collection("campus_items").add(newItem)
+        .then(() => {
+            reportForm.reset();
+            if (typeof imagePreviewContainer !== 'undefined' && imagePreviewContainer) {
+                imagePreviewContainer.style.display = "none";
+            }
+            selectedImageBase64 = ""; // Reset image string
+            alert(currentLang === 'en' ? "Report Submitted! 🎉" : "रिपोर्ट सबमिट हो गई! 🎉");
+        })
+        .catch((error) => {
+            console.error("Firebase database push error: ", error);
+            alert("Error: Data send nahi ho paya!");
+        });
+
         
         renderItems(); // ग्रिड अपडेट करें
     });
@@ -158,12 +186,13 @@ function renderItems() {
             <p><strong>📞 ${labels[currentLang].con}:</strong> ${item.contact}</p>
             
             <!-- डिलीट करने का बटन -->
-            <button onclick="deleteCard(${index})" style="margin-top: 15px; width: 100%; padding: 8px; background-color: #00ffcc; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.85rem; transition: background 0.2s;"
-			onmouseover="this.style.backgroundColor='pink'" 
-    onmouseout="this.style.backgroundColor='#00ffcc'">
+        // // ⚡ 3. index ki jagah item.id pass kiya hai taaki live data direct cloud se delete ho
+        card.innerHTML += `
+            <button onclick="deleteCard('${item.id}')" style="margin-top: 15px; width: 100%; padding: 10px; background-color: #343a40; color: #ffffff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#dc3545'" onmouseout="this.style.backgroundColor='#343a40'">
                 ${labels[currentLang].deleteBtn}
             </button>
         `;
+
         itemsGrid.appendChild(card);
     });
 
@@ -189,16 +218,23 @@ window.closeModal = function() {
     }
 };
 
-// 7. कार्ड डिलीट करने का मुख्य फ़ंक्शन
-window.deleteCard = function(index) {
+// // ⚡ 4. कार्ड डिलीट करने का मुख्य लाइव फायरबेस फंक्शन
+window.deleteCard = function(docId) {
     const confirmMsg = currentLang === 'en' ? "Are you sure this item is resolved/found?" : "क्या आप निश्चित हैं कि यह सामान मिल गया है और इसे हटाना चाहते हैं?";
     
     if (confirm(confirmMsg)) {
-        campusItems.splice(index, 1); // ऐरे (Array) से डेटा हटाएं
-        localStorage.setItem('campus_items', JSON.stringify(campusItems)); // लोकल स्टोरेज अपडेट करें
-        renderItems(); // स्क्रीन को तुरंत रीफ्रेश करें
+        db.collection("campus_items").doc(docId).delete()
+        .then(() => {
+            console.log("Card successfully deleted from Live Firebase Database!");
+            alert(currentLang === 'en' ? "Item removed successfully! 🎉" : "सामान सफलतापूर्वक हटा दिया गया है! 🎉");
+        })
+        .catch((error) => {
+            console.error("Firebase Delete Error: ", error);
+            alert("Error: Card delete nahi ho paya!");
+        });
     }
 };
+
 
 // 8. फ़िल्टर बटन्स क्लिक इवेंट्स का मैनेजमेंट
 document.getElementById('filter-all').addEventListener('click', function() { currentFilter = 'All'; resetFilterClass(this); renderItems(); });
