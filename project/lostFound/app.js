@@ -1,4 +1,6 @@
-// एलिमेंट्स सिलेक्टर्स
+// ==========================================
+// 1. ELEMENTS SELECTORS
+// ==========================================
 const reportForm = document.getElementById('report-form');
 const itemsGrid = document.getElementById('items-grid');
 const themeToggle = document.getElementById('theme-toggle');
@@ -7,80 +9,105 @@ const itemImageInput = document.getElementById('item-image');
 const imagePreviewContainer = document.getElementById('image-preview-container');
 const imagePreview = document.getElementById('image-preview');
 
+// ==========================================
+// 2. GLOBAL VARIABLES
+// ==========================================
 let currentLang = 'en';
 let currentFilter = 'All';
-let selectedImageBase64 = ""; // इमेज डेटा स्टोर करने के लिए वेरिएबल
+let selectedImageBase64 = ""; 
+let campusItems = []; 
 
-// ब्राउज़र लोकल स्टोरेज डेटाबेस सिस्टम (डिफ़ॉल्ट कार्ड्स के साथ)
-// // ⚡ 1. Firebase Firestore se live cards fetch karne ka logic
-let campusItems = []; // Shuruat me khali array rakhein
+// Default Dummy Cards
+const defaultCards = [
+    { id: "default1", title: "College ID Card", description: "Blue ribbon", type: "Lost", location: "Aala Hazrat Gate", contact: "9912345678", image: "", time: "11 Jun, 01:30 AM" },
+    { id: "default2", title: "Watch", description: "Sonata, Black color", type: "Found", location: "Noori Masjid", contact: "8090703870", image: "", time: "11 Jun, 01:15 AM" }
+];
 
-// Real-time listener: Laptop aur mobile ko har second sync rakhega
-db.collection("campus_items").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-    campusItems = []; // Purana array clear karein
-    
-    snapshot.forEach((doc) => {
-        let itemData = doc.data();
-        itemData.id = doc.id; // Unique document ID save ki
-        campusItems.push(itemData);
-    });
-    
-    // Agar database me koi data na ho, toh default dummy cards dikhane ke liye logic
-    if (campusItems.length === 0) {
-        campusItems = [
-            { id: "default1", title: "College ID Card", description: "Blue ribbon, ", type: "Lost", location: "Aala Hazrat Gate", contact: "9912345678", image: "", time: "11 Jun, 01:30 AM" },
-            { id: "default2", title: "Watch", description: "Sonata, Black color", type: "Found", location: "Noori Masjid", contact: "8090703870", image: "", time: "11 Jun, 01:15 AM" }
-        ];
-    }
-    
-    if (typeof renderItems === "function") {
+// ==========================================
+// 3. FIREBASE REAL-TIME LIVE SYNC (LAPTOP & MOBILE SYNC FIXED)
+// ==========================================
+try {
+    // ⚡ .orderBy("timestamp", "desc") lagane par dono devices instant sync honge
+    db.collection("campus_items").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
+        campusItems = []; 
+        snapshot.forEach((doc) => {
+            let itemData = doc.data();
+            itemData.id = doc.id; 
+            campusItems.push(itemData);
+        });
+        
+        if (campusItems.length === 0) {
+            campusItems = defaultCards;
+        }
         renderItems();
-    }
-});
+    }, (error) => {
+        console.error("Firebase Sync Error: ", error);
+        // Index issue hone par offline framework load karein
+        campusItems = defaultCards;
+        renderItems();
+    });
+} catch (e) {
+    console.error("Firebase missing, running offline.");
+    campusItems = defaultCards;
+    renderItems();
+}
 
-
-// 1. इमेज चुनने पर उसका प्रीव्यू (Preview) दिखाने का लॉजिक
+// ==========================================
+// 4. IMAGE PREVIEW & COMPRESSION LOGIC
+// ==========================================
 if (itemImageInput) {
     itemImageInput.addEventListener('change', function(e) {
-        const file = e.target.files;
+        const file = e.target.files[0]; 
         if (file) {
             const reader = new FileReader();
             reader.onload = function(event) {
-                selectedImageBase64 = event.target.result; // इमेज को सुरक्षित डेटा फॉर्मैट में बदला
-                if (imagePreview) imagePreview.src = selectedImageBase64;
-                if (imagePreviewContainer) imagePreviewContainer.style.display = "block"; // प्रीव्यू बॉक्स दिखाएँ
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const MAX_WIDTH = 400; 
+                    const MAX_HEIGHT = 300;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                    } else {
+                        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    selectedImageBase64 = canvas.toDataURL('image/jpeg', 0.6); 
+                    
+                    if (imagePreview) imagePreview.src = selectedImageBase64;
+                    if (imagePreviewContainer) imagePreviewContainer.style.display = "block";
+                };
             };
             reader.readAsDataURL(file);
         }
     });
 }
 
-// 2. भाषा बदलने का बटन क्लिक इवेंट
+// ==========================================
+// 5. LANGUAGE TOGGLE
+// ==========================================
 if (langBtn) {
     langBtn.addEventListener('click', () => {
         currentLang = currentLang === 'en' ? 'hi' : 'en';
         langBtn.textContent = currentLang === 'en' ? 'हिंदी' : 'English';
-
-        // मुख्य टेक्स्ट बदलना
-        document.querySelectorAll('[data-en]').forEach(el => {
-            el.textContent = el.getAttribute(`data-${currentLang}`);
-        });
-
-        // प्लेसहोल्डर्स बदलना
-        document.querySelectorAll('[data-en-placeholder]').forEach(input => {
-            input.placeholder = input.getAttribute(`data-${currentLang}-placeholder`);
-        });
-
-        // सेलेक्ट ड्रॉपडाउन ऑप्शन्स बदलना
-        document.querySelectorAll('select option[data-en]').forEach(opt => {
-            opt.textContent = opt.getAttribute(`data-${currentLang}`);
-        });
-
-        renderItems(); // ग्रिड कार्ड्स को रीलोड करें
+        document.querySelectorAll('[data-en]').forEach(el => el.textContent = el.getAttribute(`data-${currentLang}`));
+        document.querySelectorAll('[data-en-placeholder]').forEach(input => input.placeholder = input.getAttribute(`data-${currentLang}-placeholder`));
+        document.querySelectorAll('select option[data-en]').forEach(opt => opt.textContent = opt.getAttribute(`data-${currentLang}`));
+        renderItems();
     });
 }
 
-// 3. डार्क मोड टॉगल लॉजिक
+// ==========================================
+// 6. DARK MODE TOGGLE (FIXED)
+// ==========================================
 if (themeToggle) {
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
@@ -88,19 +115,16 @@ if (themeToggle) {
     });
 }
 
-// 4. नया डेटा लोकल स्टोरेज में तारीख और समय के साथ जोड़ने का लॉजिक
+// ==========================================
+// 7. SUBMIT DATA TO FIREBASE (WITH SYSTEM TIMESTAMP)
+// ==========================================
 if (reportForm) {
     reportForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        // वर्तमान तारीख और समय निकालना
         const now = new Date();
         const dateTimeString = now.toLocaleString(currentLang === 'en' ? 'en-US' : 'hi-IN', {
-            day: 'numeric',
-            month: 'short',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
+            day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true
         });
         
         const newItem = {
@@ -109,31 +133,32 @@ if (reportForm) {
             type: document.getElementById('item-type').value,
             location: document.getElementById('item-location').value,
             contact: document.getElementById('reporter-contact').value,
-            image: selectedImageBase64, // कनवर्टेड फोटो का डेटा
-            time: dateTimeString // समय यहाँ सेव होगा
+            image: selectedImageBase64, 
+            time: dateTimeString,
+            // ⚡ SERVER TIMESTAMP: Yeh line mobile aur laptop dono ko instant sync rakhegi
+            timestamp: firebase.firestore.FieldValue.serverTimestamp() 
         };
         
-                // // ⚡ 2. Local storage hatakar direct Firebase Firestore me live push karne ka logic
-        db.collection("campus_items").add(newItem)
-        .then(() => {
-            reportForm.reset();
-            if (typeof imagePreviewContainer !== 'undefined' && imagePreviewContainer) {
-                imagePreviewContainer.style.display = "none";
-            }
-            selectedImageBase64 = ""; // Reset image string
-            alert(currentLang === 'en' ? "Report Submitted! 🎉" : "रिपोर्ट सबमिट हो गई! 🎉");
-        })
-        .catch((error) => {
-            console.error("Firebase database push error: ", error);
-            alert("Error: Data send nahi ho paya!");
-        });
-
-        
-        renderItems(); // ग्रिड अपडेट करें
+        try {
+            db.collection("campus_items").add(newItem)
+            .then(() => {
+                reportForm.reset();
+                if (imagePreviewContainer) imagePreviewContainer.style.display = "none";
+                selectedImageBase64 = ""; 
+                alert(currentLang === 'en' ? "Report Submitted! 🎉" : "रिपोर्ट सबमिट हो गई! 🎉");
+            })
+            .catch((error) => {
+                console.error("Firebase Error: ", error);
+            });
+        } catch(err) {
+            console.error("Firebase disconnected.");
+        }
     });
 }
 
-// 5. लाइव कार्ड्स दिखाने का मुख्य फंक्शन (समय, क्लिकेबल फोटो और डिलीट बटन सपोर्ट के साथ)
+// ==========================================
+// 8. RENDER LIVE CARDS GRID
+// ==========================================
 function renderItems() {
     if (!itemsGrid) return;
     itemsGrid.innerHTML = '';
@@ -153,46 +178,42 @@ function renderItems() {
         "Gate Madarsa Ziyaul uloom": "मदरसा ज़ियाउल उलूम गेट", "Raza Nagar khor": "रज़ा नगर खोर"
     };
 
-    campusItems.forEach((item, index) => {
-        if (currentFilter !== 'All' && item.type !== currentFilter) return;
+    campusItems.forEach((item) => {
+        const itemType = item.type || "Lost";
+        if (currentFilter !== 'All' && itemType !== currentFilter) return;
         count++;
 
-        const badgeText = item.type.toLowerCase() === 'lost' ? labels[currentLang].lost : labels[currentLang].found;
+        const badgeText = itemType.toLowerCase() === 'lost' ? labels[currentLang].lost : labels[currentLang].found;
         
-        let displayLocation = item.location;
+        let displayLocation = item.location || "Unknown";
         if (currentLang === 'hi' && locationTranslations[item.location]) {
             displayLocation = locationTranslations[item.location];
         }
 
-        // इमेज टैग सेटअप (इस पर क्लिक करते ही openModal फ़ंक्शन चलेगा)
         let imgTag = "";
         if (item.image) {
-            imgTag = `<img src="${item.image}" onclick="openModal('${item.image}')" style="width:100%; height:150px; object-fit:cover; border-radius:6px; margin:10px 0; border: 1px solid var(--border-color); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" title="${currentLang === 'en' ? 'Click to view full image' : 'बड़ा देखने के लिए क्लिक करें'}">`;
+            imgTag = `<img src="${item.image}" onclick="openModal('${item.image}')" style="width:100%; height:150px; object-fit:cover; border-radius:6px; margin:10px 0; border: 1px solid var(--border-color); cursor: pointer;">`;
         }
 
-        const displayTime = item.time || (currentLang === 'en' ? "Just now" : "अभी-अभी");
+        const displayTime = item.time || "Just now";
 
         const card = document.createElement('div');
         card.className = 'item-card';
         card.innerHTML = `
-            <span class="badge ${item.type.toLowerCase()}">${badgeText}</span>
-            <h3> ${item.title}</h3>
-            
+            <span class="badge ${itemType.toLowerCase()}">${badgeText}</span>
+            <h3> ${item.title || "No Title"}</h3>
             <p style="font-size: 0.8rem; color: #777; margin: -5px 0 10px 0;"><strong>${labels[currentLang].timeLabel}</strong> ${displayTime}</p>
-            
             ${imgTag}
-            <p><strong>${labels[currentLang].desc}:</strong> ${item.description}</p>
+            <p><strong>${labels[currentLang].desc}:</strong> ${item.description || ""}</p>
             <p><strong>📍 ${labels[currentLang].loc}:</strong> ${displayLocation}</p>
-            <p><strong>📞 ${labels[currentLang].con}:</strong> ${item.contact}</p>
-            
-            <!-- डिलीट करने का बटन -->
-        // // ⚡ 3. index ki jagah item.id pass kiya hai taaki live data direct cloud se delete ho
+            <p><strong>📞 ${labels[currentLang].con}:</strong> ${item.contact || ""}</p>
+        `;
+
         card.innerHTML += `
-            <button onclick="deleteCard('${item.id}')" style="margin-top: 15px; width: 100%; padding: 10px; background-color: #343a40; color: #ffffff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#dc3545'" onmouseout="this.style.backgroundColor='#343a40'">
+            <button onclick="deleteCard('${item.id}')" style="margin-top: 15px; width: 100%; padding: 10px; background-color: #343a40; color: #ffffff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
                 ${labels[currentLang].deleteBtn}
             </button>
         `;
-
         itemsGrid.appendChild(card);
     });
 
@@ -200,51 +221,58 @@ function renderItems() {
         itemsGrid.innerHTML = `<div class="loading">${labels[currentLang].noItem}</div>`;
     }
 }
+// FILTER BUTTONS
+const filterAll = document.getElementById("filter-all");
+const filterLost = document.getElementById("filter-lost");
+const filterFound = document.getElementById("filter-found");
 
-// 6. फोटो को बड़ा और बंद करने वाले दो नए जावास्क्रिप्ट फंक्शन्स
+if (filterAll) {
+    filterAll.addEventListener("click", () => {
+        currentFilter = "All";
+        renderItems();
+
+        document.querySelectorAll(".filter-btn").forEach(btn =>
+            btn.classList.remove("active")
+        );
+        filterAll.classList.add("active");
+    });
+}
+
+if (filterLost) {
+    filterLost.addEventListener("click", () => {
+        currentFilter = "Lost";
+        renderItems();
+
+        document.querySelectorAll(".filter-btn").forEach(btn =>
+            btn.classList.remove("active")
+        );
+        filterLost.classList.add("active");
+    });
+}
+
+if (filterFound) {
+    filterFound.addEventListener("click", () => {
+        currentFilter = "Found";
+        renderItems();
+
+        document.querySelectorAll(".filter-btn").forEach(btn =>
+            btn.classList.remove("active")
+        );
+        filterFound.classList.add("active");
+    });
+}
+
+// ==========================================
+// 9. IMAGE MODAL FUNCTIONS
+// ==========================================
 window.openModal = function(imgSrc) {
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImg');
-    if (modal && modalImg) {
-        modal.style.display = "block";
-        modalImg.src = imgSrc;
-    }
+
+    modal.style.display = "block";
+    modalImg.src = imgSrc;
 };
 
 window.closeModal = function() {
-    const modal = document.getElementById('imageModal');
-    if (modal) {
-        modal.style.display = "none";
-    }
+    document.getElementById('imageModal').style.display = "none";
 };
-
-// // ⚡ 4. कार्ड डिलीट करने का मुख्य लाइव फायरबेस फंक्शन
-window.deleteCard = function(docId) {
-    const confirmMsg = currentLang === 'en' ? "Are you sure this item is resolved/found?" : "क्या आप निश्चित हैं कि यह सामान मिल गया है और इसे हटाना चाहते हैं?";
-    
-    if (confirm(confirmMsg)) {
-        db.collection("campus_items").doc(docId).delete()
-        .then(() => {
-            console.log("Card successfully deleted from Live Firebase Database!");
-            alert(currentLang === 'en' ? "Item removed successfully! 🎉" : "सामान सफलतापूर्वक हटा दिया गया है! 🎉");
-        })
-        .catch((error) => {
-            console.error("Firebase Delete Error: ", error);
-            alert("Error: Card delete nahi ho paya!");
-        });
-    }
-};
-
-
-// 8. फ़िल्टर बटन्स क्लिक इवेंट्स का मैनेजमेंट
-document.getElementById('filter-all').addEventListener('click', function() { currentFilter = 'All'; resetFilterClass(this); renderItems(); });
-document.getElementById('filter-lost').addEventListener('click', function() { currentFilter = 'Lost'; resetFilterClass(this); renderItems(); });
-document.getElementById('filter-found').addEventListener('click', function() { currentFilter = 'Found'; resetFilterClass(this); renderItems(); });
-
-function resetFilterClass(btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-}
-
-// पहली बार लोड करने के लिए रन करें
-renderItems();
