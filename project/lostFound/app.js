@@ -27,31 +27,37 @@ const defaultCards = [
 // 3. FIREBASE REAL-TIME LIVE SYNC (LAPTOP & MOBILE SYNC FIXED)
 // ==========================================
 try {
-    // ⚡ .orderBy("timestamp", "desc") lagane par dono devices instant sync honge
-    db.collection("campus_items").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-        campusItems = []; 
+    db.collection("campus_items")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+
+        campusItems = [];
+
         snapshot.forEach((doc) => {
             let itemData = doc.data();
-            itemData.id = doc.id; 
+            itemData.id = doc.id;
             campusItems.push(itemData);
         });
-        
+
         if (campusItems.length === 0) {
             campusItems = defaultCards;
         }
+
         renderItems();
-    }, (error) => {
-        console.error("Firebase Sync Error: ", error);
-        // Index issue hone par offline framework load karein
-        campusItems = defaultCards;
-        renderItems();
-    });
+
+      }, (error) => {
+          console.error("Firebase Sync Error:", error);
+
+          campusItems = defaultCards;
+          renderItems();
+      });
+
 } catch (e) {
-    console.error("Firebase missing, running offline.");
+    console.error("Firebase missing:", e);
+
     campusItems = defaultCards;
     renderItems();
 }
-
 // ==========================================
 // 4. IMAGE PREVIEW & COMPRESSION LOGIC
 // ==========================================
@@ -139,20 +145,31 @@ if (reportForm) {
             timestamp: firebase.firestore.FieldValue.serverTimestamp() 
         };
         
-        try {
-            db.collection("campus_items").add(newItem)
-            .then(() => {
-                reportForm.reset();
-                if (imagePreviewContainer) imagePreviewContainer.style.display = "none";
-                selectedImageBase64 = ""; 
-                alert(currentLang === 'en' ? "Report Submitted! 🎉" : "रिपोर्ट सबमिट हो गई! 🎉");
-            })
-            .catch((error) => {
-                console.error("Firebase Error: ", error);
-            });
-        } catch(err) {
-            console.error("Firebase disconnected.");
-        }
+try {
+    db.collection("campus_items")
+      .add(newItem)
+      .then((docRef) => {
+          console.log("Added ID:", docRef.id);
+
+          reportForm.reset();
+
+          if (imagePreviewContainer) {
+              imagePreviewContainer.style.display = "none";
+          }
+
+          selectedImageBase64 = "";
+
+          alert("Report Submitted! 🎉");
+      })
+      .catch((error) => {
+          console.error("Firebase Error:", error);
+          alert(error.message);
+      });
+
+} catch (err) {
+    console.error("Firebase disconnected:", err);
+    alert(err.message);
+}
     });
 }
 
