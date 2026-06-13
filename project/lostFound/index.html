@@ -46,15 +46,31 @@
             <p>Only for Raza Nagar Adari</p>
         </div>
     </div>
-		
-        <div class="nav-controls">
-            <div class="lang-switcher">
-                <button id="lang-btn">हिंदी</button>
+
+    <!-- सभी बटन्स अब एक ही nav-controls कंटेनर के अंदर रहेंगे -->
+    <div class="nav-controls">
+        
+        <!-- Admin लॉगिन और स्टेटस सेक्शन -->
+        <div id="admin-auth-section">
+            <button id="admin-login-btn">Admin</button>
+            <div id="admin-status" style="display: inline-block;">
+                <span id="admin-email-display"></span>
+                <button onclick="logoutAdmin()" id="logout-btn" style="display: none;">Logout</button>
             </div>
-            <button id="theme-toggle">☾</button>
         </div>
-    </nav>
-	
+
+        <!-- भाषा बदलने का बटन -->
+        <div class="lang-switcher">
+            <button id="lang-btn">हिंदी</button>
+        </div>
+
+        <!-- थीम बदलने का बटन -->
+        <button id="theme-toggle">🌙</button>
+
+    </div>
+</nav>
+
+
 	
 <div class="responsive-ticker-bar">
     <marquee direction="left" scrollamount="8" onmouseover="this.stop();" onmouseout="this.start();">
@@ -118,6 +134,7 @@ body {
                     <label for="item-image" class="custom-file-upload" data-en="📸 Attach Photo (Camera / Gallery)" data-hi="📸 फोटो जोड़ें (कैमरा / गैलरी)">
                         📸 Attach Photo (Camera / Gallery)
                     </label>
+                    
                     <!-- <input type="file" id="item-image" accept="image/*" capture="environment" style="display: none;"> -->
 					<input type="file" id="item-image" accept="image/*" style="display: none;">
 
@@ -177,13 +194,22 @@ body {
         <!-- बड़ी होने वाली इमेज -->
         <img id="modalImg" style="margin: auto; display: block; max-width: 80%; max-height: 80%; border-radius: 8px; box-shadow: 0 4px 15px rgba(255,255,255,0.2);">
     </div>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>    
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script src="https://gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
 
 <script src="firebase-config.js"></script>
 <script src="app.js"></script>
 
 
+<!-- Image ko bada dekhne ka target HTML box (Body ke end me jodein) -->
+<div id="image-modal" class="modal" style="display: none;">
+    <span class="close-modal-btn" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modal-img">
+</div>
 
 </body>
 </html>
