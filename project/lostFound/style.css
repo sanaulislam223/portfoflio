@@ -31,7 +31,7 @@ body {
     align-items: center;
     padding: 6px 20px;
     background-color: var(--card-bg);
-    border-bottom: 2px solid #00ffcc);
+    border-bottom: 2px solid #00ffcc;
 
 	box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
     
