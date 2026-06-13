@@ -11,6 +11,8 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
+const auth = firebase.auth();
 
 console.log("CONFIG LOADED");
-console.log("DB =", db);
+console.log("DB -", db);
+
