@@ -1,15 +1,20 @@
 {
+  "id": "/index.html",
   "short_name": "Portfolio",
   "name": "My Personal Portfolio",
   "icons": [
     {
-      "src": "icon-512.png",
-      "type": "images/png",
-      "sizes": "512x512",
-      "purpose": "any"
+      "src": "./icon-512.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "./index.html",
   "background_color": "#ffffff",
   "display": "standalone",
   "theme_color": "#000000"
