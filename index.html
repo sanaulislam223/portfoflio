@@ -56,6 +56,16 @@
 <link href="https://googleapis.com" rel="stylesheet">
 <link rel="manifest" href="manifest.json">
 
+<!-- Service Worker Script -->
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log("PWA Ready!"))
+      .catch((err) => console.log("Error:", err));
+  }
+</script>
+
+
 	</head>
 
 	<body>
