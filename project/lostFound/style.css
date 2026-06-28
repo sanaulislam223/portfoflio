@@ -14,6 +14,14 @@
     --text-color: #f5f5f5;
     --border-color: #333333;
 }
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
 
 body {
     margin: 0;
@@ -31,7 +39,7 @@ body {
     align-items: center;
     padding: 6px 20px;
     background-color: var(--card-bg);
-    border-bottom: 2px solid #00ffcc;
+    border-bottom: 2px solid #00ffcc);
 
 	box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
     
@@ -109,7 +117,7 @@ body {
 
 /* Layout */
 .main-container {
-    display: flex; padding: 30px; gap: 30px; max-width: 1300px; margin: 0 auto;
+    display: flex; padding: px; gap: 30px; max-width: 1300px; margin: 0 auto;
 }
 .sidebar-form {
     flex: 1; 
@@ -528,3 +536,410 @@ body.dark-mode textarea::placeholder {
 }
 
 
+#logout-btn {
+    background-color: transparent !important; /* ताकि अलग से चमकता हुआ दिखे */
+    margin-left: 10px;
+    z-index: 9999; /* सबसे ऊपर दिखने के लिए */
+    color:#FFCC00;
+    border-radius: 20px;
+    padding: 8px 10px;
+    border: 1.5px solid #00ffcc;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow : 0 0 20px rgba(0, 255, 204, 0.3);
+    transition: all 0.2s ease;
+}
+
+
+
+
+
+
+/* --- PREMIUM LOGIN PAGE STYLES --- */
+#login-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); /* Modern dark slate background */
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+
+.login-card {
+    background: white;
+    padding: 45px 35px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 420px;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+}
+
+.brand-logo-container {
+    width: 150px;
+    height: 150px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px auto;
+
+}
+
+.brand-logo-img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+}
+
+.portal-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 5px 0;
+    letter-spacing: -0.5px;
+}
+
+.portal-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.divider-line {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 25px 0;
+    width: 100%;
+}
+
+.login-instruction {
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* Premium Button Styling */
+#google-login-btn {
+    width: 100%;
+    height: 50px;
+    background-color: #4285F4;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Roboto', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+    transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
+}
+
+#google-login-btn:hover {
+    background-color: #357ae8;
+    box-shadow: 0 6px 16px rgba(66, 133, 244, 0.4);
+}
+
+#google-login-btn:active {
+    transform: scale(0.98);
+}
+
+.google-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    background-color: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 1px;
+}
+
+.google-svg-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.btn-text {
+    margin: 0 auto;
+    letter-spacing: 0.2px;
+}
+
+.card-footer-text {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 35px;
+    margin-bottom: 0;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+.card-footer-tex {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .login-card {
+        padding: 35px 20px;
+    }
+}
+
+
+
+
+
+/* टिकर बार का बाहरी डिब्बा */
+.responsive-ticker-bar {
+    width: 100%;
+    background-color: transparent; /* काली पट्टी हटाने के लिए */
+    overflow: hidden;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+
+/* अंदर का रैपर जो टेक्स्ट को एक लाइन में रखता है */
+.ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+}
+
+/* न्यूज़ टेक्स्ट जो दोबारा बिना रुके दौड़ेगा */
+.ticker-text {
+    display: inline-block;
+    padding-left: 100%; /* शुरुआत स्क्रीन के दाईं तरफ से होगी */
+    font-size: 1rem;
+    font-weight: 600;
+    color: #000000;      /* लाइट मोड में काला टेक्स्ट */
+    animation: smooth-marquee 18s linear infinite !important; /* एनीमेशन को चालू रखने के लिए */
+}
+
+/* माउस ले जाने पर न्यूज़ को रोकने के लिए */
+.ticker-wrap:hover .ticker-text {
+    animation-play-state: paused;
+}
+
+/* एनीमेशन का नियम जो पट्टी को चलाता है */
+@keyframes smooth-marquee {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+
+/* जब डार्क मोड चालू होगा, तब टेक्स्ट सफ़ेद हो जाएगा */
+body.dark-mode .ticker-text {
+    color: #ffffff !important;
+}
+
+
+
+
+
+
+/* मुख्य चैट बॉक्स जो फॉर्म के नीचे रहेगा */
+.embedded-chat-box {
+    width: 100%;
+    margin-top: 20px; /* फॉर्म से दूरी */
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* चैट का ऊपरी हिस्सा */
+.chat-box-header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+}
+.chat-box-header h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/* मैसेज स्क्रीन एरिया (स्क्रॉल बार के साथ) */
+.chat-box-messages {
+    height: 180px; /* फिक्स हाइट ताकि फॉर्म ज्यादा लंबा न दिखे */
+    padding: 12px;
+    overflow-y: auto;
+    background-color: #FFF8DC;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* मैसेजेस का अलग-अलग स्टाइल */
+.chat-msg {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    max-width: 85%;
+    line-height: 1.4;
+}
+.chat-msg.system {
+    background-color: #e2e3e5;
+    color: #383d41;
+    align-self: flex-start;
+}
+.chat-msg.user {
+    background-color: #007bff;
+    color: white;
+    align-self: flex-end; /* यूजर का मैसेज राइट साइड दिखेगा */
+}
+
+/* इनपुट और सेंड बटन */
+.chat-box-input-wrapper {
+    display: flex;
+    padding: 8px;
+    background-color: #ffffff;
+    border-top: 1px solid #eee;
+}
+.chat-box-input-wrapper input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    outline: none;
+}
+.chat-box-input-wrapper button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0 15px;
+    margin-left: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+/* 🌙 डार्क मोड अनुकूलता (Dark Mode Compatibility) */
+body.dark-mode .embedded-chat-box { background-color: #1e1e1e; border-color: #333; }
+body.dark-mode .chat-box-messages { background-color: #121212; }
+body.dark-mode .chat-msg.system { background-color: #2d2d2d; color: #fff; }
+body.dark-mode .chat-box-input-wrapper { background-color: #1e1e1e; border-top-color: #333; }
+body.dark-mode .chat-box-input-wrapper input { background-color: #2d2d2d; border-color: #444; color: white; }
+
+
+
+/* चैट के मैसेज एरिया को थोड़ा व्यवस्थित करने के लिए */
+.chat-box-messages {
+    max-height: 180px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* यूज़र का भेजा हुआ मैसेज हमेशा राइट साइड दिखेगा */
+.chat-msg.user {
+    background-color: #007bff !important;
+    color: white !important;
+    align-self: flex-end !important;
+    margin-left: auto !important;
+    border-radius: 8px 8px 0px 8px;
+    padding: 6px 12px;
+    max-width: 85%;
+}
+
+/* मैसेज के ऊपर Gmail ID का स्टाइल */
+.chat-user-id {
+    display: block;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: bold;
+    margin-bottom: 2px;
+    word-break: break-all;
+}
+
+/* 🌙 डार्क मोड सपोर्ट (जब आप चाँद वाले बटन पर क्लिक करेंगे) */
+body.dark-mode .independent-chat-box {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+}
+
+body.dark-mode .chat-box-messages {
+    background-color: #121212 !important;
+}
+
+body.dark-mode .chat-msg.system {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .chat-box-input-wrapper {
+    background-color: #1e1e1e !important;
+    border-top-color: #333 !important;
+}
+
+body.dark-mode .chat-box-input-wrapper input {
+    background-color: #2d2d2d !important;
+    border-color: #444 !important;
+    color: white !important;
+}
+
+
+
+/* न्यूज़ टिकर पट्टी को फॉर्म के ऊपर हावी होने से रोकने के लिए */
+.responsive-ticker-bar {
+    position: relative !important;
+    transform: none !important;
+    margin-bottom: 20px !important;
+    z-index: 5 !important;
+    clear: both !important;
+}
+
+/* मुख्य ग्रिड को थोड़ा और नीचे धकेलें ताकि पट्टी ऊपर आज़ाद रहे */
+.main-container, .main-layout {
+    margin-top: 10px !important;
+}
+
+
+/* बाईं तरफ वाले (System/Other Users) मैसेजेस के अंदर जीमेल आईडी का रंग */
+.chat-msg.system .chat-user-id {
+    color: #444444 !important; /* गहरा ग्रे रंग जो लाइट बैकग्राउंड पर साफ़ दिखेगा */
+    opacity: 0.9 !important;
+}
+
+/* दाईं तरफ वाले (Your Own) मैसेजेस के अंदर जीमेल आईडी का रंग */
+.chat-msg.user .chat-user-id {
+    color: rgba(255, 255, 255, 0.9) !important; /* नीले बैकग्राउंड पर साफ़ दिखने के लिए सफ़ेद */
+}
+
+/* 🌙 डार्क मोड अनुकूलता (Dark Mode Compatibility) */
+body.dark-mode .chat-msg.system .chat-user-id {
+    color: #cccccc !important; /* डार्क मोड चालू होने पर बाईं तरफ की आईडी हल्की सफ़ेद हो जाएगी */
+}
